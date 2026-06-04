@@ -38,7 +38,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: Backend API CRUD and integrations (MinIO, Meilisearch).
+- [x] 02-01: Backend API CRUD and integrations (MinIO, Meilisearch).
 - [ ] 02-02: Next.js Admin Dashboard and variant matrix.
 
 ### Phase 3: Storefront UI
