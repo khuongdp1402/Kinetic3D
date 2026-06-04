@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { SearchIcon, X } from "lucide-react";
-import { MeiliSearch } from "meilisearch";
+import { Meilisearch } from "meilisearch";
 import Image from "next/image";
 import Link from "next/link";
 
-const client = new MeiliSearch({
+const client = new Meilisearch({
   host: "http://localhost:7700",
   // no api key for local development
 });
