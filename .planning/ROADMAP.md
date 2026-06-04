@@ -24,7 +24,7 @@ Kinetic3D will be built in 4 coarse phases starting with the foundational DevOps
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: DevOps setup and database initialization.
+- [x] 01-01: DevOps setup and database initialization.
 - [ ] 01-02: Backend Core layer and EF JSONB mappings.
 
 ### Phase 2: Admin API & Dashboard
@@ -75,7 +75,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure & Core Backend | 0/2 | Not started | - |
+| 1. Infrastructure & Core Backend | 1/2 | In Progress|  |
 | 2. Admin API & Dashboard | 0/2 | Not started | - |
 | 3. Storefront UI | 0/1 | Not started | - |
 | 4. 3D Experience & Cart | 0/2 | Not started | - |
