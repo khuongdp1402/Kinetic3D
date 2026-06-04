@@ -39,7 +39,7 @@ Plans:
 
 Plans:
 - [x] 02-01: Backend API CRUD and integrations (MinIO, Meilisearch).
-- [ ] 02-02: Next.js Admin Dashboard and variant matrix.
+- [x] 02-02: Next.js Admin Dashboard and variant matrix.
 
 ### Phase 3: Storefront UI
 **Goal**: Build the fast, responsive storefront UI without the heavy 3D logic yet.
@@ -77,5 +77,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Infrastructure & Core Backend | 2/2 | Complete   | 2026-06-04 |
 | 2. Admin API & Dashboard | 0/2 | Not started | - |
-| 3. Storefront UI | 0/1 | Not started | - |
+| 3. Storefront UI | 0/1 | Planned    |  |
 | 4. 3D Experience & Cart | 0/2 | Not started | - |
