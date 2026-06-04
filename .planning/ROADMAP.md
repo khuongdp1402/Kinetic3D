@@ -1,4 +1,4 @@
-# Roadmap: Kinetic3D
+/gsd-plan-phase 5# Roadmap: Kinetic3D
 
 ## Overview
 
@@ -73,9 +73,19 @@ Plans:
 **Execution Order:**
 Phases execute in numeric order: 1 → 2 → 3 → 4
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Infrastructure & Core Backend | 2/2 | Complete   | 2026-06-04 |
-| 2. Admin API & Dashboard | 0/2 | Not started | - |
-| 3. Storefront UI | 1/1 | Complete   | 2026-06-04 |
-| 4. 3D Experience & Cart | 0/2 | Not started | - |
+| Phase                            | Plans Complete | Status      | Completed  |
+| -------------------------------- | -------------- | ----------- | ---------- |
+| 1. Infrastructure & Core Backend | 2/2            | Complete    | 2026-06-04 |
+| 2. Admin API & Dashboard         | 0/2            | Not started | -          |
+| 3. Storefront UI                 | 1/1            | Complete    | 2026-06-04 |
+| 4. 3D Experience & Cart          | 0/2            | Not started | -          |
+
+### Phase 5: Complete UI, Categories, and 3D Animations
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 4
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 5 to break down)

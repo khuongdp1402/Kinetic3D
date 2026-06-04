@@ -58,6 +58,9 @@ Progress: [░░░░░░░░░░] 0%
 
 ## Accumulated Context
 
+### Roadmap Evolution
+- Phase 5 added: Complete UI, Categories, and 3D Animations
+
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
