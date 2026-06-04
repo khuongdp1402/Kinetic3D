@@ -65,8 +65,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: Three.js viewer and dynamic pricing integration.
-- [ ] 04-02: Cart, checkout flow, and Umami analytics.
+- [x] 04-01: Three.js viewer and dynamic pricing integration.
+- [x] 04-02: Cart, checkout flow, and Umami analytics.
 
 ## Progress
 
