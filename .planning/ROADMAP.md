@@ -6,7 +6,7 @@ Kinetic3D will be built in 4 coarse phases starting with the foundational DevOps
 
 ## Phases
 
-- [ ] **Phase 1: Infrastructure & Core Backend** - Setup Docker, PostgreSQL, and .NET 8 Clean Architecture.
+- [x] **Phase 1: Infrastructure & Core Backend** - Setup Docker, PostgreSQL, and .NET 8 Clean Architecture. (completed 2026-06-04)
 - [ ] **Phase 2: Admin API & Dashboard** - API CRUD, MinIO, Meilisearch sync, and Admin UI.
 - [ ] **Phase 3: Storefront UI** - Next.js storefront foundation and styling.
 - [ ] **Phase 4: 3D Experience & Cart** - Three.js integration, dynamic pricing, and checkout.
@@ -25,7 +25,7 @@ Kinetic3D will be built in 4 coarse phases starting with the foundational DevOps
 
 Plans:
 - [x] 01-01: DevOps setup and database initialization.
-- [ ] 01-02: Backend Core layer and EF JSONB mappings.
+- [x] 01-02: Backend Core layer and EF JSONB mappings.
 
 ### Phase 2: Admin API & Dashboard
 **Goal**: Create the APIs and Admin UI to manage products, variants, and flash sales.
@@ -75,7 +75,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Infrastructure & Core Backend | 1/2 | In Progress|  |
+| 1. Infrastructure & Core Backend | 2/2 | Complete   | 2026-06-04 |
 | 2. Admin API & Dashboard | 0/2 | Not started | - |
 | 3. Storefront UI | 0/1 | Not started | - |
 | 4. 3D Experience & Cart | 0/2 | Not started | - |
