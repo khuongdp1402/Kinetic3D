@@ -7,7 +7,8 @@ namespace Kinetic3D.Domain.Entities
     {
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
+        public decimal? Price { get; set; }
         public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
     }
 }

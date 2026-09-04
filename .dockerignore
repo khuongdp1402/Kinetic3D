@@ -1,0 +1,11 @@
+.git
+.vs
+**/bin/
+**/obj/
+**/node_modules/
+**/.next/
+out/
+*.user
+*.suo
+*.log
+.planning/

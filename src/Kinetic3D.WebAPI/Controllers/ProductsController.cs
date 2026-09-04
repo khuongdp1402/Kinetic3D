@@ -25,14 +25,21 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProducts()
     {
-        var products = await _context.Products.Include(p => p.Variants).ToListAsync();
+        var products = await _context.Products
+            .Where(p => !p.IsDeleted)
+            .Include(p => p.Category)
+            .Include(p => p.Variants)
+            .ToListAsync();
         return Ok(products);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProduct(Guid id)
     {
-        var product = await _context.Products.Include(p => p.Variants).FirstOrDefaultAsync(p => p.Id == id);
+        var product = await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Variants)
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null)
         {
             return NotFound();
@@ -43,6 +50,11 @@ public class ProductsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] Product product)
     {
+        if (string.IsNullOrWhiteSpace(product.Name) || string.IsNullOrWhiteSpace(product.Slug))
+        {
+            return BadRequest("Name và Slug là bắt buộc.");
+        }
+
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
 
@@ -59,10 +71,15 @@ public class ProductsController : ControllerBase
             return BadRequest();
         }
 
+        if (string.IsNullOrWhiteSpace(product.Name) || string.IsNullOrWhiteSpace(product.Slug))
+        {
+            return BadRequest("Name và Slug là bắt buộc.");
+        }
+
         _context.Entry(product).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        
-        await _mediator.Publish(new ProductCreatedEvent(product));
+
+        await _mediator.Publish(new ProductUpdatedEvent(product));
 
         return NoContent();
     }
@@ -71,12 +88,12 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> DeleteProduct(Guid id)
     {
         var product = await _context.Products.FindAsync(id);
-        if (product == null)
+        if (product == null || product.IsDeleted)
         {
             return NotFound();
         }
 
-        _context.Products.Remove(product);
+        product.IsDeleted = true;
         await _context.SaveChangesAsync();
 
         return NoContent();

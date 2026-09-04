@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Model Thumbnail Generator</title>
+  <style>
+    body { background: #0b0c10; color: #fff; font-family: monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+    #canvas-container { width: 600px; height: 600px; border: 2px solid #333; position: relative; border-radius: 16px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #252836 0%, #0d0e15 100%); }
+    #status { margin-top: 20px; font-size: 16px; color: #f5b942; }
+    .gallery { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+    .gallery img { width: 120px; height: 120px; border-radius: 8px; border: 1px solid #444; object-fit: cover; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+  <h2>Kinetic3D — Authentic Model Thumbnail Renderer</h2>
+  <div id="canvas-container"></div>
+  <div id="status">Khởi tạo Three.js...</div>
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    window.RENDERED_IMAGES = {};
+    window.RENDER_DONE = false;
+
+    const MODELS_TO_RENDER = [
+      {
+        name: 'sherman-tank-print.jpg',
+        url: '/models/sherman_print_plate.glb',
+        color: '#5a6b52',
+        metalness: 0.3,
+        roughness: 0.6,
+        camDistMult: 0.65,
+        camAngle: [1.0, 1.2, 1.4]
+      },
+      {
+        name: 'gearbox-print.jpg',
+        url: '/models/GearboxAssy.glb',
+        camDistMult: 1.2,
+        camAngle: [1.5, 1.8, 2.0]
+      },
+      {
+        name: 'cyber-bot-print.jpg',
+        url: '/models/RobotExpressive.glb',
+        camDistMult: 1.1,
+        camAngle: [0.8, 0.4, 2.2]
+      },
+      {
+        name: 'ion-drive-print.jpg',
+        url: '/models/PrimaryIonDrive.glb',
+        camDistMult: 1.2,
+        camAngle: [1.6, 1.2, 2.0]
+      },
+      {
+        name: 'nefertiti-print.jpg',
+        url: '/models/Nefertiti.glb',
+        camDistMult: 1.15,
+        camAngle: [0.8, 0.3, 2.2]
+      }
+    ];
+
+    async function init() {
+      const container = document.getElementById('canvas-container');
+      const statusEl = document.getElementById('status');
+      const galleryEl = document.getElementById('gallery');
+
+      const width = 600;
+      const height = 600;
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(2);
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.1;
+      container.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+
+      // Studio Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+      scene.add(ambientLight);
+
+      const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+      keyLight.position.set(5, 8, 5);
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0x90b0ff, 1.2);
+      fillLight.position.set(-6, 3, -4);
+      scene.add(fillLight);
+
+      const rimLight = new THREE.DirectionalLight(0xffd090, 1.0);
+      rimLight.position.set(0, -4, -6);
+      scene.add(rimLight);
+
+      const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+
+      const loader = new THREE.GLTFLoader();
+
+      for (let i = 0; i < MODELS_TO_RENDER.length; i++) {
+        const item = MODELS_TO_RENDER[i];
+        statusEl.innerText = `[${i + 1}/${MODELS_TO_RENDER.length}] Đang tải & render: ${item.name}...`;
+
+        // Clear previous meshes
+        while (scene.children.length > 4) {
+          scene.remove(scene.children[scene.children.length - 1]);
+        }
+
+        try {
+          const gltf = await new Promise((resolve, reject) => {
+            loader.load(item.url, resolve, undefined, reject);
+          });
+
+          const root = gltf.scene;
+
+          // Apply color/material overrides if specified (e.g. army green for Sherman)
+          if (item.color) {
+            root.traverse((child) => {
+              if (child.isMesh) {
+                child.material = new THREE.MeshStandardMaterial({
+                  color: item.color,
+                  metalness: item.metalness ?? 0.3,
+                  roughness: item.roughness ?? 0.5
+                });
+              }
+            });
+          }
+
+          // Center and compute bounds
+          const box = new THREE.Box3().setFromObject(root);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+
+          root.position.x -= center.x;
+          root.position.y -= center.y;
+          root.position.z -= center.z;
+
+          scene.add(root);
+
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const fov = camera.fov * (Math.PI / 180);
+          let cameraDistance = (maxDim / 2 / Math.tan(fov / 2)) * (item.camDistMult || 1.2);
+
+          const [ax, ay, az] = item.camAngle;
+          const angleVec = new THREE.Vector3(ax, ay, az).normalize();
+          camera.position.copy(angleVec.multiplyScalar(cameraDistance));
+          camera.lookAt(0, 0, 0);
+
+          // Force multiple frames to ensure all textures compile and load
+          renderer.render(scene, camera);
+          await new Promise(r => setTimeout(r, 150));
+          renderer.render(scene, camera);
+          await new Promise(r => setTimeout(r, 150));
+          renderer.render(scene, camera);
+
+          const dataUrl = renderer.domElement.toDataURL('image/jpeg', 0.95);
+          window.RENDERED_IMAGES[item.name] = dataUrl;
+
+          // Auto-post to local server
+          try {
+            await fetch('/save-image?name=' + encodeURIComponent(item.name), {
+              method: 'POST',
+              body: dataUrl
+            });
+            console.log('Saved to server:', item.name);
+          } catch (postErr) {
+            console.warn('Post error:', postErr);
+          }
+
+          // Add to gallery preview
+          const img = document.createElement('img');
+          img.src = dataUrl;
+          img.title = item.name;
+          galleryEl.appendChild(img);
+
+        } catch (err) {
+          console.error(`Error rendering ${item.name}:`, err);
+        }
+      }
+
+      statusEl.innerText = `Đã hoàn tất render ${Object.keys(window.RENDERED_IMAGES).length} sản phẩm thật!`;
+      window.RENDER_DONE = true;
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

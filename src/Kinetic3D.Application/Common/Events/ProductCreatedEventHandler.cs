@@ -16,6 +16,6 @@ public class ProductCreatedEventHandler : INotificationHandler<ProductCreatedEve
 
     public async Task Handle(ProductCreatedEvent notification, CancellationToken cancellationToken)
     {
-        await _searchService.IndexProductAsync(notification.Product);
+        await _searchService.IndexProductAsync(notification.Product.ToSearchDocument());
     }
 }

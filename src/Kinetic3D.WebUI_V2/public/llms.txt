@@ -1,0 +1,22 @@
+# Kinetic3D — Digital 3D Fabrication Platform & Custom Workshop
+
+> Kinetic3D is a disruptive 3D e-commerce platform and custom manufacturing workshop based in Vietnam, offering automated multi-material 3D printing (AMS), an AI-driven image-to-3D generator, and an interactive real-time 3D product configurator.
+
+## Core Capabilities & Services
+- **AMS Multi-Color 3D Printing:** High-precision multi-filament FDM and SLA resin manufacturing for intricate mechanical models, anime figurines, and functional prototypes.
+- **AI Image-to-3D Studio:** Automated generation of game-ready quad meshes (500 to 2M polygons) and full PBR texture sets from 2D sketches or photographs.
+- **On-Demand Custom Fabrication:** Upload STL/OBJ/STEP files for volume-based instant quotes with PLA+, PETG, Resin, or Carbon-fiber materials.
+- **Ready-to-Ship Cyber-Tech Catalog:** Smart charging docks, artisan resin keycaps, and desktop display pieces.
+
+## Key URLs
+- Homepage & 3D Showcase: /
+- Catalog & Instant Search: /products
+- Category Collections: /categories
+- Custom 3D Printing Service: /custom
+- About Studio & Equipment: /about
+
+## Technical Specifications & Tolerances
+- **FDM Printing Precision:** Layer height 0.08mm - 0.28mm, dimensional tolerance ±0.1mm.
+- **SLA Resin Precision:** Layer height 0.02mm, ultra-smooth surface finish.
+- **Materials:** PLA+, PETG, TPU Flexible, High-temp ABS, High-detail Water-washable Resin, Tough Resin.
+- **Payment Methods:** Automated VietQR Banking Transfer (Casso integration), Cash on Delivery (COD).

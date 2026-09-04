@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   postgres:
@@ -43,8 +42,8 @@ services:
       /bin/sh -c "
       sleep 5;
       /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
-      /usr/bin/mc mb myminio/products;
-      /usr/bin/mc anonymous set public myminio/products;
+      /usr/bin/mc mb myminio/kinetic3d-assets;
+      /usr/bin/mc anonymous set public myminio/kinetic3d-assets;
       exit 0;
       "
     networks:
@@ -70,7 +69,44 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://kinetic3d:kinetic3d_pass@postgres:5432/umami}
     ports:
-      - "3000:3000"
+      - "8080:3000"
+    networks:
+      - kinetic3d_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: src/Kinetic3D.WebAPI/Dockerfile
+    container_name: kinetic3d-backend
+    restart: on-failure
+    depends_on:
+      - postgres
+      - minio
+      - meilisearch
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=${POSTGRES_DB:-kinetic3d_db};Username=${POSTGRES_USER:-kinetic3d};Password=${POSTGRES_PASSWORD:-kinetic3d_pass}
+      - MinioSettings__Endpoint=minio:9000
+      - MinioSettings__PublicEndpoint=localhost:9000
+      - MeilisearchSettings__Endpoint=http://meilisearch:7700
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5099:8080"
+    networks:
+      - kinetic3d_network
+
+  frontend:
+    build:
+      context: src/Kinetic3D.WebUI_V2
+      dockerfile: Dockerfile
+    container_name: kinetic3d-frontend
+    restart: on-failure
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5099
+      - INTERNAL_API_URL=http://backend:8080
+    ports:
+      - "3003:3000"
     networks:
       - kinetic3d_network
 

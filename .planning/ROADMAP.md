@@ -89,3 +89,54 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 Plans:
 - [ ] TBD (run /gsd-plan-phase 5 to break down)
+
+### Phase 6: tôi cần phân UI ấn tượng hơn, hiện tại trang home đang khá đơn điệu, ko xem được chi tiết sản phẩm, ko có sản phẩm theo danh mục, tôi cần bám sát ý tưởng, các danh mục sản phẩm đã vạch ra như proposal https://docs.google.com/presentation/d/1n19WNHoQQyYAPGjPp95KXB9o7k0JZ3lXlq07Dykgt5k/edit?slide=id.p1#slide=id.p1. hãy xem và phát triển thêm các UI còn thiếu
+
+**Goal:** Hoàn thiện UI trang Home, Chi tiết sản phẩm & Danh mục theo style Cyber-Tech
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 2/2 plans complete
+
+Plans:
+- [x] 06-01: Product Detail Split-Screen & Page Transitions
+- [x] 06-02: Home Page Scrolling Storytelling & Slider
+
+### Phase 7: 7 Context & Role:Act as an Expert Frontend Architect specializing in Next.js, Tailwind CSS, and Award-winning WebGL/GSAP animations. Your task is to build the Home Page for " Kinetic3D\ - a high-end, cyber-tech 3D printing and customization E-commerce platform.Tech Stack Requirements:Framework: Next.js (App Router).Styling: Tailwind CSS.Smooth Scrolling: @studio-freight/lenis.Core Animation Engine: GSAP (with ScrollTrigger and SplitText logic).Micro-interactions: Framer Motion (specifically for 3D Tilt on product cards).Design System & Vibe:Aesthetic: Cyber-tech, Modern Minimalist, Dark Mode.Background: Obsidian Black (#0B0C10).Accents: Cybernetic Cyan (#66FCF1) and Neon Orange (#FF5722).Typography: Oversized, sans-serif fonts, using heavy negative space. Avoid traditional borders; use subtle glows or glassmorphism.Task Breakdown (Build these components sequentially):SectionTechnical & Animation RequirementsGlobal SetupWrap the main layout in a Lenis smooth scroll provider. Initialize GSAP ScrollTrigger globally.Sticky HeaderGlassmorphism background. Includes a minimalist Logo, Navigation links, and a Search Bar component.Hero SectionFull-screen (100vh). Use an HTML5 <video> tag (autoplay, muted, loop) as the absolute background. Apply GSAP text-reveal (clip-path masking) for the main oversized headline. The text should slide up smoothly on mount.Flash Sale BannerA horizontal marquee or distinct strip. Implement a Countdown Timer and a progress bar showing \X% Sold Out\ with a subtle Neon Orange glowing effect to create FOMO.Product GridDisplay standard products. Crucial: Wrap each Product Card in a Framer Motion component that applies a 3D Tilt effect based on mouse hover coordinates.Parallax FeatureA split-screen section. Pin the left side (using GSAP ScrollTrigger pin: true) containing an image/video, while the right side text content continues to scroll upwards.Policy Bento GridUse CSS Grid to create a Bento-box layout for shipping and quality policies. Apply GSAP ScrollReveal (fade-up and opacity) as the user scrolls into this section.Execution Rules:Do not use dummy placeholder colors (like bg-red-500). Use the exact Cyber-tech color palette provided.Break down the code into reusable components (e.g., Hero.tsx, ProductCard.tsx).Ensure the video background is optimized with CSS object-cover.Provide the code for page.tsx that stitches all these components together.
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 6
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 7 to break down)
+
+### Phase 8: Redesign Home Page as Landing Page with bilingual support and Light/Dark mode
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 7
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 8 to break down)
+
+### Phase 9: Terminal Industries UX Overhaul
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 8
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 9 to break down)
+
+### Phase 10: Build a single full-viewport hero section in React, Vite, Tailwind CSS
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 9
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 10 to break down)

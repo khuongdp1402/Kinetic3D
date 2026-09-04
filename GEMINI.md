@@ -7,12 +7,14 @@ Kinetic3D is a disruptive 3D e-commerce platform that functions as a futuristic 
 
 **Core Value:** Providing an immersive, real-time interactive 3D customization experience with instantaneous feedback (pricing and search) to elevate the standard of e-commerce.
 
-### Constraints
+### Canonical Specification & Constraints
 
-- **Architecture**: Clean Architecture — to maintain scalable separation of concerns.
+- **Primary Source of Truth**: All agents MUST read [PROJECT_SPEC.md](file:///e:/Project/Kinetic3D/Kinetic3D/PROJECT_SPEC.md) before making code, architecture, or schema changes.
+- **Architecture**: Clean Architecture (.NET 8 WebAPI + Next.js 15 App Router) — maintain scalable separation of concerns.
 - **Database Model**: No separate tables for Color/Size — must use JSONB to store dynamic attributes.
-- **Self-Hosted Infrastructure**: MinIO, Meilisearch, Umami must run in local Docker rather than managed cloud services to minimize costs.
-- **UI/UX**: Strictly adhere to the Cyber-Tech / Modern Minimalist aesthetic without typical E-commerce clutter.
+- **Self-Hosted Infrastructure**: MinIO, Meilisearch, PostgreSQL must run in local Docker rather than managed cloud services.
+- **UI/UX**: Strictly adhere to the Cyber-Tech / Modern Minimalist aesthetic without clutter. Always ensure 60-120 FPS buttery smooth scrolling.
+- **Documentation Protocol**: Any feature or structural changes must be promptly documented back into [PROJECT_SPEC.md](file:///e:/Project/Kinetic3D/Kinetic3D/PROJECT_SPEC.md).
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:STACK.md -->

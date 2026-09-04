@@ -1,9 +1,17 @@
 using System.Threading.Tasks;
-using Kinetic3D.Domain.Entities;
 
 namespace Kinetic3D.Application.Common.Interfaces;
 
+public record ProductSearchDocument(
+    string Id,
+    string Name,
+    string Slug,
+    string? ShortDescription,
+    decimal BasePrice,
+    string? CategoryName,
+    string[] Images);
+
 public interface ISearchService
 {
-    Task IndexProductAsync(Product product);
+    Task IndexProductAsync(ProductSearchDocument document);
 }

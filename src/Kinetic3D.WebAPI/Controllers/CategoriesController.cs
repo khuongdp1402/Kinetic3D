@@ -21,7 +21,7 @@ public class CategoriesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCategories()
     {
-        var categories = await _context.Categories.ToListAsync();
+        var categories = await _context.Categories.Where(c => !c.IsDeleted).ToListAsync();
         return Ok(categories);
     }
 
@@ -39,6 +39,11 @@ public class CategoriesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] Category category)
     {
+        if (string.IsNullOrWhiteSpace(category.Name) || string.IsNullOrWhiteSpace(category.Slug))
+        {
+            return BadRequest("Name và Slug là bắt buộc.");
+        }
+
         _context.Categories.Add(category);
         await _context.SaveChangesAsync();
 
@@ -53,6 +58,11 @@ public class CategoriesController : ControllerBase
             return BadRequest();
         }
 
+        if (string.IsNullOrWhiteSpace(category.Name) || string.IsNullOrWhiteSpace(category.Slug))
+        {
+            return BadRequest("Name và Slug là bắt buộc.");
+        }
+
         _context.Entry(category).State = EntityState.Modified;
         await _context.SaveChangesAsync();
 
@@ -63,12 +73,12 @@ public class CategoriesController : ControllerBase
     public async Task<IActionResult> DeleteCategory(Guid id)
     {
         var category = await _context.Categories.FindAsync(id);
-        if (category == null)
+        if (category == null || category.IsDeleted)
         {
             return NotFound();
         }
 
-        _context.Categories.Remove(category);
+        category.IsDeleted = true;
         await _context.SaveChangesAsync();
 
         return NoContent();
