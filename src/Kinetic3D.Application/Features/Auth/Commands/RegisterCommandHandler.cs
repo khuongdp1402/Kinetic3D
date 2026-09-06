@@ -29,16 +29,49 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthResul
             throw new InvalidOperationException("Email đã được sử dụng.");
         }
 
+        // Check device fingerprint for free 30 credits
+        int initialCredits = 0;
+        bool shouldRecordClaim = false;
+
+        if (!string.IsNullOrWhiteSpace(request.DeviceHash))
+        {
+            var alreadyClaimed = await _context.DeviceClaims.AnyAsync(d => d.DeviceHash == request.DeviceHash, cancellationToken);
+            if (!alreadyClaimed)
+            {
+                initialCredits = 30;
+                shouldRecordClaim = true;
+            }
+        }
+        else
+        {
+            initialCredits = 30;
+        }
+
         var user = new User
         {
             Id = Guid.NewGuid(),
             Email = request.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             DisplayName = request.DisplayName,
-            Role = "Customer"
+            Role = "Customer",
+            Credits = initialCredits,
+            DeviceHash = request.DeviceHash,
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.Users.Add(user);
+
+        if (shouldRecordClaim && !string.IsNullOrWhiteSpace(request.DeviceHash))
+        {
+            _context.DeviceClaims.Add(new DeviceClaim
+            {
+                Id = Guid.NewGuid(),
+                DeviceHash = request.DeviceHash,
+                UserId = user.Id,
+                ClaimedAt = DateTime.UtcNow
+            });
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
 
         var token = _jwtTokenGenerator.GenerateToken(user);

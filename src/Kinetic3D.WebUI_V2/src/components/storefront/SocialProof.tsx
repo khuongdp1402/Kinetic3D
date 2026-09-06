@@ -69,7 +69,7 @@ function GlowCounter({
       </div>
       <p
         className="text-xs uppercase tracking-[0.2em]"
-        style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-mono)" }}
+        style={{ color: "var(--c-white-50)", fontFamily: "var(--font-mono)" }}
       >
         {label}
       </p>
@@ -87,12 +87,16 @@ function TestimonialMarquee({ items, reverse = false }: { items: typeof testimon
         {doubled.map((t, i) => (
           <div
             key={`${t.id}-${i}`}
-            className="glass-card flex-shrink-0 w-[340px] p-6 rounded-xl flex flex-col justify-between"
-            style={{ minHeight: "180px" }}
+            className="flex-shrink-0 w-[340px] p-6 rounded-xl flex flex-col justify-between border transition-colors shadow-sm"
+            style={{
+              minHeight: "180px",
+              backgroundColor: "var(--c-bg-card)",
+              borderColor: "var(--c-white-10)",
+            }}
           >
             <p
               className="text-sm leading-relaxed mb-5"
-              style={{ color: "rgba(255,255,255,0.7)" }}
+              style={{ color: "var(--c-white-80)" }}
             >
               &ldquo;{t.quote}&rdquo;
             </p>
@@ -111,12 +115,12 @@ function TestimonialMarquee({ items, reverse = false }: { items: typeof testimon
                   .join("")}
               </div>
               <div>
-                <div className="text-sm font-bold" style={{ color: "#ffffff" }}>
+                <div className="text-sm font-bold" style={{ color: "var(--c-white)" }}>
                   {t.name}
                 </div>
                 <div
                   className="text-[11px]"
-                  style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-mono)" }}
+                  style={{ color: "var(--c-white-50)", fontFamily: "var(--font-mono)" }}
                 >
                   {t.role}, {t.company}
                 </div>
@@ -136,7 +140,7 @@ export function SocialProof() {
   const row2 = testimonials.slice(half);
 
   return (
-    <section className="w-full py-32 md:py-40" style={{ backgroundColor: "#0a0a0f" }}>
+    <section className="w-full py-32 md:py-40 border-t transition-colors duration-300" style={{ backgroundColor: "var(--c-bg)", borderColor: "var(--c-white-10)" }}>
       {/* Stats */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -151,7 +155,7 @@ export function SocialProof() {
               key={i}
               className="py-6"
               style={{
-                borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                borderLeft: i > 0 ? "1px solid var(--c-white-10)" : "none",
                 paddingLeft: i > 0 ? "2rem" : "0",
               }}
             >
@@ -176,8 +180,8 @@ export function SocialProof() {
           className="text-center mb-12"
         >
           <h2
-            className="text-3xl md:text-4xl font-bold tracking-[-0.03em]"
-            style={{ color: "#ffffff" }}
+            className="text-3xl md:text-4xl font-bold tracking-[-0.03em] font-sans"
+            style={{ color: "var(--c-white)" }}
           >
             Được Tin Dùng Bởi Các Kỹ Sư
           </h2>

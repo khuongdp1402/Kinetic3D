@@ -115,9 +115,35 @@ export interface AuthResultDto {
   displayName: string;
   role: string;
   token: string;
+  credits?: number;
+}
+
+export interface CreditPackageDto {
+  id: string;
+  name: string;
+  credits: number;
+  bonusCredits: number;
+  priceVnd: number;
+  priceUsd: number;
+  badge: string;
+  description: string;
+  isPopular: boolean;
+}
+
+export interface AdminUserDto {
+  id: string;
+  email: string;
+  displayName: string;
+  role: string;
+  credits: number;
+  avatarUrl: string | null;
+  createdAt: string;
+  ordersCount: number;
+  totalSpent: number;
 }
 
 export interface PresignedUploadResult {
   uploadUrl: string;
   publicUrl: string;
 }
+

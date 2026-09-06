@@ -47,7 +47,7 @@ export function ProfileDropdown({ onClose }: ProfileDropdownProps) {
           </span>
           <div className="flex items-center gap-1">
              <Coins className="w-3 h-3 text-[var(--c-orange)]" />
-             <span className="text-xs font-mono font-bold text-white">{user.credits.toLocaleString()}</span>
+             <span className="text-xs font-mono font-bold text-white">{(user.credits ?? 30).toLocaleString()}</span>
           </div>
         </div>
       </div>

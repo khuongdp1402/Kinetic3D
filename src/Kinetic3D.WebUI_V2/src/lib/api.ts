@@ -1,10 +1,12 @@
 import { useAuthStore } from "@/store/useAuthStore";
 import type {
+  AdminUserDto,
   AuthResultDto,
   CategoryDto,
   CreateCustomRequestInput,
   CreateOrderInput,
   CreateProductInput,
+  CreditPackageDto,
   CustomRequestDto,
   OrderDto,
   PresignedUploadResult,
@@ -80,17 +82,19 @@ export const productsApi = {
 
 export const ordersApi = {
   create: (data: CreateOrderInput) =>
-    apiFetch<OrderDto>("/api/orders", { method: "POST", body: JSON.stringify(data) }),
+    apiFetch<OrderDto>("/api/orders", { method: "POST", body: JSON.stringify(data) }, true),
   getAll: () => apiFetch<OrderDto[]>("/api/orders", {}, true),
   getMy: () => apiFetch<OrderDto[]>("/api/orders/my", {}, true),
   getById: (id: string) => apiFetch<OrderDto>(`/api/orders/${id}`),
+  lookup: (query: string) =>
+    apiFetch<OrderDto>(`/api/orders/lookup?query=${encodeURIComponent(query)}`),
   updateStatus: (id: string, status: string) =>
     apiFetch<OrderDto>(`/api/orders/${id}/status`, { method: "PUT", body: JSON.stringify({ orderId: id, status }) }, true),
 };
 
 export const customRequestsApi = {
   create: (data: CreateCustomRequestInput) =>
-    apiFetch<CustomRequestDto>("/api/customrequests", { method: "POST", body: JSON.stringify(data) }),
+    apiFetch<CustomRequestDto>("/api/customrequests", { method: "POST", body: JSON.stringify(data) }, true),
   getAll: () => apiFetch<CustomRequestDto[]>("/api/customrequests", {}, true),
   quote: (id: string, quotedPrice: number, adminNote?: string) =>
     apiFetch<CustomRequestDto>(
@@ -111,11 +115,75 @@ export const customRequestsApi = {
 export const authApi = {
   login: (email: string, password: string) =>
     apiFetch<AuthResultDto>("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
-  register: (email: string, password: string, displayName: string) =>
+  register: (email: string, password: string, displayName: string, deviceHash?: string) =>
     apiFetch<AuthResultDto>("/api/auth/register", {
       method: "POST",
-      body: JSON.stringify({ email, password, displayName }),
+      body: JSON.stringify({ email, password, displayName, deviceHash }),
     }),
+  google: (data: { idToken?: string; email?: string; displayName?: string; photoUrl?: string; googleId?: string; deviceHash?: string }) =>
+    apiFetch<AuthResultDto>("/api/auth/google", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  setGuestPassword: (data: { email: string; password: string; displayName?: string; deviceHash?: string }) =>
+    apiFetch<AuthResultDto>("/api/auth/set-password-for-guest", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+};
+
+export const creditsApi = {
+  getPackages: () => apiFetch<CreditPackageDto[]>("/api/credits/packages"),
+  createOrder: (packageId: string, currency: "VND" | "USD" = "VND", email?: string, userId?: string) =>
+    apiFetch<{
+      topupCode: string;
+      package: CreditPackageDto;
+      amount: number;
+      currency: string;
+      totalCredits: number;
+      vietQr: {
+        bankId: string;
+        accountNo: string;
+        accountName: string;
+        qrUrl: string;
+        description: string;
+      };
+    }>("/api/credits/order", {
+      method: "POST",
+      body: JSON.stringify({ packageId, currency, email, userId }),
+    }, true),
+  confirmTest: (userId: string, creditsToAdd: number) =>
+    apiFetch<{ success: boolean; userId: string; newCredits: number; message: string }>("/api/credits/confirm-test", {
+      method: "POST",
+      body: JSON.stringify({ userId, creditsToAdd }),
+    }),
+};
+
+export const adminUsersApi = {
+  getAll: (search?: string, role?: string) => {
+    const params = new URLSearchParams();
+    if (search) params.append("search", search);
+    if (role && role !== "all") params.append("role", role);
+    return apiFetch<{
+      total: number;
+      users: AdminUserDto[];
+      stats: {
+        totalUsers: number;
+        totalPro: number;
+        totalAdmins: number;
+        totalCreditsIssued: number;
+      };
+    }>(`/api/admin/users?${params.toString()}`, {}, true);
+  },
+  updateRole: (id: string, role: string, credits?: number) =>
+    apiFetch<{ success: boolean; id: string; role: string; credits: number; message: string }>(
+      `/api/admin/users/${id}/role`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ role, credits }),
+      },
+      true
+    ),
 };
 
 export const uploadsApi = {
@@ -123,5 +191,30 @@ export const uploadsApi = {
     apiFetch<PresignedUploadResult>("/api/uploads/presigned-url", {
       method: "POST",
       body: JSON.stringify({ fileName, contentType, folder }),
+    }),
+};
+
+export interface OrderPaymentStatusResponse {
+  orderId: string;
+  orderNumber: string;
+  status: string;
+  isPaid: boolean;
+  total: number;
+  note?: string;
+  createdAt: string;
+}
+
+export const paymentsApi = {
+  getOrderStatus: (idOrOrderNumber: string) =>
+    apiFetch<OrderPaymentStatusResponse>(`/api/payments/order-status/${encodeURIComponent(idOrOrderNumber)}`),
+  simulateCassoPayment: (idOrOrderNumber: string) =>
+    apiFetch<{ success: boolean; message: string; orderNumber: string; status: string; transactionRef: string }>(
+      `/api/payments/simulate-casso-payment/${encodeURIComponent(idOrOrderNumber)}`,
+      { method: "POST" }
+    ),
+  testTelegram: (message?: string) =>
+    apiFetch<{ sent: boolean; message: string }>("/api/payments/test-telegram", {
+      method: "POST",
+      body: JSON.stringify({ message }),
     }),
 };

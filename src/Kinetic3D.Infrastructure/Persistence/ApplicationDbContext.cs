@@ -18,6 +18,7 @@ namespace Kinetic3D.Infrastructure.Persistence
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<CustomRequest> CustomRequests { get; set; }
+        public DbSet<DeviceClaim> DeviceClaims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

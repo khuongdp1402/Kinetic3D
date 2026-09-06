@@ -6,16 +6,18 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useCartStore } from "@/store/useCartStore";
 import { useState, useEffect } from "react";
-import { Menu, X, ShoppingBag, Heart, User, Sparkles } from "lucide-react";
+import { Menu, X, ShoppingBag, Heart, User, Sparkles, Zap } from "lucide-react";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useAppStore } from "@/store/useAppStore";
 import { ProfileDropdown } from "@/components/auth/ProfileDropdown";
 import { ThemeToggle } from "@/components/storefront/ThemeToggle";
+import { Kinetic3DLogo } from "@/components/brand/Kinetic3DLogo";
 
 const navLinks = [
   { label: "Trang chủ", href: "/" },
   { label: "Sản phẩm", href: "/products" },
+  { label: "Bảng giá", href: "/pricing" },
 ];
 
 export default function Header() {
@@ -27,7 +29,7 @@ export default function Header() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   const { isAuthenticated, user } = useAuthStore();
-  const { openAuthModal, openSubscriptionModal } = useAppStore();
+  const { openAuthModal, openCreditModal } = useAppStore();
 
   const cartItems = useCartStore((s) => s.items);
   const cartCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
@@ -53,9 +55,8 @@ export default function Header() {
   }, []);
 
   const isCustomPage = pathname === "/custom";
-  const isHomeUnscrolled = pathname === "/" && !scrolled;
-  // If we are on /custom or home unscrolled or dark mode is active, header must have white text/icons
-  const isDarkHeader = !mounted || resolvedTheme === "dark" || isCustomPage || isHomeUnscrolled;
+  const isDark = resolvedTheme === "dark";
+  const isDarkHeader = mounted && (isDark || isCustomPage);
 
   const textColor = isDarkHeader ? "#ffffff" : "var(--c-white)";
   const textMutedColor = isDarkHeader ? "rgba(255, 255, 255, 0.8)" : "var(--c-white-80)";
@@ -89,15 +90,7 @@ export default function Header() {
           {/* Left: Logo + Core Nav */}
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-0 z-10 shrink-0">
-              <span className="text-xl font-bold tracking-[-0.05em]" style={{ color: textColor }}>
-                KINETIC
-              </span>
-              <span
-                className="text-xl font-bold tracking-[-0.05em]"
-                style={{ color: "var(--c-lime)", textShadow: "0 0 20px var(--c-lime-50)" }}
-              >
-                3D
-              </span>
+              <Kinetic3DLogo size="md" isDarkHeader={isDarkHeader} showTagline={false} />
             </Link>
 
             <nav className="hidden lg:flex items-center gap-6">
@@ -197,14 +190,21 @@ export default function Header() {
 
             {/* Upgrade CTA */}
             <button
-              onClick={openSubscriptionModal}
-              className="hidden sm:flex items-center gap-2 text-xs font-bold tracking-wider px-4 py-2 rounded-full transition-all hover:scale-105"
+              onClick={() => {
+                if (!isAuthenticated) {
+                  openAuthModal();
+                } else {
+                  openCreditModal();
+                }
+              }}
+              className="hidden sm:flex items-center gap-1.5 text-xs font-bold tracking-wider px-4 py-2 rounded-full transition-all hover:scale-105"
               style={{
                 backgroundColor: "var(--c-orange)",
                 color: "#ffffff",
               }}
             >
-              UPGRADE
+              <Zap className="w-3.5 h-3.5 fill-current" />
+              NÂNG CẤP
             </button>
 
             {/* Mobile Menu Toggle */}
@@ -222,9 +222,13 @@ export default function Header() {
       {/* Mobile Menu Overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8"
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 px-6"
           style={{ backgroundColor: "var(--c-bg)" }}
         >
+          <div className="mb-4">
+            <Kinetic3DLogo size="lg" showTagline={true} />
+          </div>
+
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -247,6 +251,22 @@ export default function Header() {
             <Sparkles className="w-6 h-6" />
             Custom
           </Link>
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(false);
+              if (!isAuthenticated) {
+                openAuthModal();
+              } else {
+                openCreditModal();
+              }
+            }}
+            className="text-2xl font-bold tracking-[-0.03em] transition-colors flex items-center gap-2"
+            style={{ color: "var(--c-orange)" }}
+          >
+            <Zap className="w-6 h-6 fill-current" />
+            Nâng Cấp Token
+          </button>
         </div>
       )}
     </>

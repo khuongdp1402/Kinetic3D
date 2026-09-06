@@ -6,19 +6,19 @@ import { motion } from "framer-motion";
 export function FinalCTA() {
   return (
     <section
-      className="w-full py-28 md:py-36 relative overflow-hidden"
-      style={{ backgroundColor: "#0a0a0f" }}
+      className="w-full py-28 md:py-36 relative overflow-hidden transition-colors duration-300 border-t"
+      style={{ backgroundColor: "var(--c-bg)", borderColor: "var(--c-white-10)" }}
     >
       {/* Pure CSS ambient glows — zero WebGL / zero GPU overhead */}
       <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] pointer-events-none rounded-full blur-[160px] opacity-20"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] pointer-events-none rounded-full blur-[160px] opacity-15"
         style={{
           background:
             "radial-gradient(ellipse at center, rgba(245,185,66,0.35) 0%, rgba(251,146,60,0.15) 50%, transparent 80%)",
         }}
       />
       <div
-        className="absolute inset-0 pointer-events-none opacity-10"
+        className="absolute inset-0 pointer-events-none opacity-5"
         style={{
           backgroundImage:
             "radial-gradient(rgba(245,185,66,0.2) 1px, transparent 1px)",
@@ -41,8 +41,8 @@ export function FinalCTA() {
           </div>
 
           <h2
-            className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.05]"
-            style={{ color: "#ffffff" }}
+            className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.05] font-sans"
+            style={{ color: "var(--c-white)" }}
           >
             Sẵn Sàng Để{" "}
             <span
@@ -57,17 +57,16 @@ export function FinalCTA() {
           </h2>
 
           <p
-            className="text-base md:text-lg mb-10 max-w-lg mx-auto text-white/60"
+            className="text-base md:text-lg mb-10 max-w-lg mx-auto font-sans"
+            style={{ color: "var(--c-white-80)" }}
           >
-            Bắt đầu dự án 3D của bạn ngay hôm nay. Từ ý tưởng đến sản phẩm thực — chúng tôi
-            hiện thực hóa tầm nhìn của bạn.
+            Bắt đầu dự án 3D của bạn ngay hôm nay. Từ ý tưởng đến sản phẩm thực — chúng tôi hiện thực hóa tầm nhìn của bạn.
           </p>
 
-          {/* Buttons */}
           <div className="flex flex-wrap justify-center gap-4 mb-16">
             <Link
               href="/products"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-lg"
               style={{
                 backgroundColor: "#f5b942",
                 color: "#0a0a0f",
@@ -76,9 +75,14 @@ export function FinalCTA() {
             >
               Khám Phá Catalog →
             </Link>
+
             <Link
               href="/custom"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] border border-white/20 text-white hover:border-[#f5b942] hover:text-[#f5b942]"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] border hover:border-[#f5b942] hover:text-[#f5b942]"
+              style={{
+                borderColor: "var(--c-white-15)",
+                color: "var(--c-white)",
+              }}
             >
               Tạo Custom 3D
             </Link>
@@ -86,11 +90,15 @@ export function FinalCTA() {
 
           {/* Newsletter */}
           <div
-            className="max-w-md mx-auto p-6 rounded-2xl border border-white/10 backdrop-blur-xl"
-            style={{ backgroundColor: "rgba(18, 18, 24, 0.7)" }}
+            className="max-w-md mx-auto p-6 rounded-2xl border backdrop-blur-xl shadow-lg"
+            style={{ 
+              backgroundColor: "var(--c-bg-card)",
+              borderColor: "var(--c-white-10)" 
+            }}
           >
             <p
-              className="text-xs uppercase tracking-[0.2em] mb-4 text-white/50 font-mono"
+              className="text-xs uppercase tracking-[0.2em] mb-4 font-mono"
+              style={{ color: "var(--c-white-50)" }}
             >
               Nhận thông báo về tính năng & bộ sưu tập mới
             </p>
@@ -104,11 +112,16 @@ export function FinalCTA() {
               <input
                 type="email"
                 placeholder="ban@email.com"
-                className="flex-1 px-4 py-3 text-sm outline-none rounded-l-xl bg-black/60 border border-white/15 border-r-0 text-white font-mono placeholder:text-white/30 focus:border-[#f5b942]/60 transition-colors"
+                className="flex-1 px-4 py-3 text-sm outline-none rounded-l-xl border border-r-0 font-mono placeholder:text-neutral-400 focus:border-[#f5b942]/60 transition-colors"
+                style={{
+                  backgroundColor: "var(--c-bg-deep)",
+                  borderColor: "var(--c-white-15)",
+                  color: "var(--c-white)",
+                }}
               />
               <button
                 type="submit"
-                className="px-6 py-3 text-xs font-bold uppercase tracking-widest rounded-r-xl transition-opacity hover:opacity-90 font-mono"
+                className="px-6 py-3 text-xs font-bold uppercase tracking-widest rounded-r-xl transition-opacity hover:opacity-90 font-mono cursor-pointer"
                 style={{
                   backgroundColor: "#f5b942",
                   color: "#0a0a0f",

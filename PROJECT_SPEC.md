@@ -258,3 +258,49 @@ Khi bạn (hoặc bất kỳ AI agent nào) được giao nhiệm vụ mở rộ
 3. **Giữ vững phong cách Cyber-Tech & 60FPS:** Mọi component mới phải tuân thủ bảng màu tối, điểm nhấn vàng hổ phách, không gây giật lag trang chủ.
 4. **Cập nhật Spec khi có thay đổi:** Bất kỳ tính năng mới, endpoint mới hoặc sửa đổi cấu trúc nào đều phải được bổ sung ngay vào tài liệu này trước khi hoàn thành phiên làm việc.
 
+---
+
+## 10. MÔ HÌNH KINH DOANH TOKEN PAY-AS-YOU-GO & CHỐNG GIAN LẬN (ANTI-CLONE)
+
+### 10.1. Cơ Chế Token Credits
+- **Không sử dụng thuê bao định kỳ (No recurring subscription/membership)**.
+- Chỉ yêu cầu nạp token khi sử dụng các tác vụ điện toán AI trong 3D Custom Studio (`/custom`).
+- Cung cấp 4 gói Token Credits linh hoạt với 2 loại tiền tệ (VND & USD):
+  1. **Starter Pack**: 100 Credits — 49.000₫ / $1.99.
+  2. **Creator Pack**: 550 Credits (Tặng thêm 10%) — 199.000₫ / $7.99.
+  3. **Pro Workshop**: 2.300 Credits (Tặng thêm 15% — Bán chạy nhất) — 599.000₫ / $23.99.
+  4. **Studio Lab**: 6.000 Credits (Tặng thêm 20%) — 1.290.000₫ / $49.99.
+- Thanh toán tức thì qua Casso VietQR MBBank (`KINETIC_CREDITS_...`).
+
+### 10.2. Cơ Chế Chống Gian Lận Đăng Ký Tài Khoản (Anti-Clone Hardware Check)
+- Mỗi người dùng mới khi đăng ký tài khoản hoặc đăng nhập Google 1-Click được tặng **30 Credits miễn phí** để trải nghiệm Studio.
+- Frontend tự động trích xuất dấu vân tay thiết bị (`DeviceFingerprint` / `kn3d_did`) dựa trên Canvas 2D/3D signature, WebGL parameters, Hardware concurrency và màn hình.
+- Backend kiểm tra bảng `DeviceClaims`:
+  - Thiết bị mới: Nhận 30 credits và ghi nhận dấu vân tay máy vào `DeviceClaims`.
+  - Thiết bị đã từng nhận thưởng: Tạo tài khoản thành công nhưng số dư gán bằng 0 credits, ngăn chặn việc tạo clone vô hạn để sử dụng free token.
+
+---
+
+## 11. PHÂN ĐỊNH CHIẾN LƯỢC 2 GIAI ĐOẠN (PHASE 1 VS PHASE 2)
+
+1. **Phase 1 (Production - Trọng tâm thương mại tức thì)**:
+   - Tập trung kinh doanh kho 18+ sản phẩm in 3D thật (In-House Core) đã kiểm định dung sai và hỗ trợ in.
+   - Luồng đặt hàng không bắt buộc đăng nhập (Guest Checkout), hỗ trợ thanh toán tự động Casso VietQR & COD.
+   - Bắn thông báo đơn hàng thời gian thực qua Telegram Bot cho đội ngũ xưởng in.
+   - Tra cứu tiến độ in 3D (`/tracking`) linh hoạt bằng Mã đơn, Số điện thoại hoặc Email.
+2. **Phase 2 (Lab / Thử nghiệm Studio AI 3D)**:
+   - Khu vực Custom Studio (`/custom`) gắn nhãn nhận diện `[LAB / PHASE 2 PREVIEW]`.
+   - Mở toàn quyền cho việc phát triển, kiểm thử luồng AI 3D Mesh (Tripo3D, Meshy) và nạp token credits.
+
+---
+
+## 12. TÍCH HỢP API AI 3D & CHIẾN LƯỢC NGUỒN HÀNG HỖN HỢP (HYBRID SOURCING)
+
+Chi tiết kỹ thuật và mã nguồn mẫu được chuẩn hóa tại: [`docs/AI_3D_INTEGRATION_AND_SOURCING_STRATEGY.md`](file:///Users/khuongdp/Projects/KINETIC/docs/AI_3D_INTEGRATION_AND_SOURCING_STRATEGY.md)
+- **Tripo3D API**: `POST https://api.tripo3d.ai/v2/openapi/task` (`text_to_model` & `image_to_model`), xuất GLB/STL/OBJ siêu tốc 8-20s.
+- **Meshy API**: `POST https://api.meshy.ai/openapi/v2/text-to-3d`, hỗ trợ AI Retopology Quads tối ưu in 3D.
+- **3-Tier Sourcing Model**:
+  - **Tầng 1 (Core)**: 100% bản in độc quyền kiểm định.
+  - **Tầng 2 (Open & Affiliate)**: Sử dụng bản quyền thương mại từ Printables Club / Patreon và ăn hoa hồng Affiliate từ CGTrader / Cults3D.
+  - **Tầng 3 (AI Lab)**: Sinh mô hình theo yêu cầu người dùng qua token và nhận in gia công Print-On-Demand.
+

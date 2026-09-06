@@ -30,6 +30,10 @@ import {
   Info,
 } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import { useAppStore } from "@/store/useAppStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Kinetic3DLogo } from "@/components/brand/Kinetic3DLogo";
+import { CreditTopupModal } from "@/components/billing/CreditTopupModal";
 
 /* ─── 3D Assets for Right Drawer ─── */
 interface StudioAsset {
@@ -561,6 +565,9 @@ export default function TripoStudioCustomPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const studioControlsRef = useRef<React.ElementRef<typeof OrbitControls>>(null);
   const addItem = useCartStore((s) => s.addItem);
+  const { openSubscriptionModal, openAuthModal } = useAppStore();
+  const { user, isAuthenticated } = useAuthStore();
+  const [showCreditModal, setShowCreditModal] = useState<boolean>(false);
 
   const handleResetStudioCamera = () => {
     if (studioControlsRef.current) {
@@ -584,6 +591,11 @@ export default function TripoStudioCustomPage() {
 
   // Trigger AI 3D generation via /api/ai-3d/generate
   const handleStartGenerate = async () => {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
+
     if (isGenerating) return;
     setIsGenerating(true);
     setGenProgress(10);
@@ -680,6 +692,11 @@ export default function TripoStudioCustomPage() {
   };
 
   const handleSendToFabrication = () => {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
+
     addItem({
       id: `custom-ai-${activeAsset.id}-${Date.now()}`,
       productId: activeAsset.id,
@@ -698,50 +715,54 @@ export default function TripoStudioCustomPage() {
 
   return (
     <div
-      className="w-full h-screen overflow-hidden flex flex-col pt-16 select-none"
-      style={{ backgroundColor: "#0b0c10", color: "#ffffff" }}
+      className="w-full h-screen overflow-hidden flex flex-col pt-16 select-none transition-colors duration-300"
+      style={{ backgroundColor: "var(--c-bg)", color: "var(--c-white)" }}
     >
       {/* ── 1. Top Application Bar ── */}
       <header
-        className="h-12 border-b border-white/10 px-4 flex items-center justify-between shrink-0 z-30"
-        style={{ backgroundColor: "#111218" }}
+        className="h-12 border-b px-4 flex items-center justify-between shrink-0 z-30 transition-colors"
+        style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-10)" }}
       >
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-md bg-[#f5b942] text-black font-black text-xs flex items-center justify-center font-mono">
-              3D
+            <Kinetic3DLogo size="sm" showTagline={false} />
+            <span className="font-mono text-[10px] px-1.5 py-0.5 rounded border border-[#22c55e]/30 bg-[#22c55e]/10 text-[#22c55e] font-bold">
+              STUDIO
             </span>
-            <span className="font-bold text-sm tracking-tight text-white">Kinetic Studio</span>
           </Link>
-          <span className="text-white/20">|</span>
-          <nav className="hidden lg:flex items-center gap-4 text-xs text-white/60">
-            <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
-            <span className="text-white font-semibold">Kho mẫu in</span>
-            <Link href="/products" className="hover:text-white transition-colors">Cửa hàng</Link>
-            <Link href="/categories" className="hover:text-white transition-colors">Danh mục</Link>
+          <span style={{ color: "var(--c-white-15)" }}>|</span>
+          <nav className="hidden lg:flex items-center gap-4 text-xs" style={{ color: "var(--c-white-50)" }}>
+            <Link href="/" className="hover:text-[#22c55e] transition-colors">Trang chủ</Link>
+            <span className="font-semibold" style={{ color: "var(--c-white)" }}>Studio AI 3D</span>
+            <Link href="/products" className="hover:text-[#22c55e] transition-colors">Kho bản in</Link>
+            <Link href="/pricing" className="hover:text-[#22c55e] transition-colors">Bảng giá Token</Link>
           </nav>
         </div>
 
         {/* Center Banner */}
-        <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-[#f5b942]/10 border border-[#f5b942]/30 text-[11px] text-[#f5b942]">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Mới: Hệ thống Smart Mesh P2.0 giải mã đa giác Quads và tối ưu file in 3D chuẩn xác &gt;</span>
+        <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300">
+          <span className="px-1.5 py-0.5 rounded bg-amber-400/20 text-[10px] font-bold tracking-wide uppercase">
+            LAB / PHASE 2 PREVIEW
+          </span>
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <span>Thử nghiệm AI 3D Mesh. Mỗi thiết bị / tài khoản mới nhận 30 token miễn phí!</span>
         </div>
 
         {/* Right User & Credit Controls */}
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono">
-            <span className="text-white/40">Đồng bộ DCC</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono">
-            <span className="text-amber-400">🟡</span>
-            <span className="text-white/90 font-bold">170 Credits</span>
+          <div 
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-mono"
+            style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-15)" }}
+          >
+            <span className="text-amber-400">⚡</span>
+            <span className="font-bold" style={{ color: "var(--c-white)" }}>{user?.credits ?? 30} Credits</span>
           </div>
           <button
-            onClick={() => alert("Đã mở gói nâng cấp thành viên Kinetic Studio Pro")}
-            className="px-3 py-1 rounded-full text-xs font-bold bg-[#f5b942] text-black hover:opacity-90 transition-opacity"
+            onClick={() => setShowCreditModal(true)}
+            className="px-3 py-1 rounded-full text-xs font-bold bg-[#22c55e] text-black hover:opacity-90 transition-opacity cursor-pointer flex items-center gap-1"
           >
-            Nâng cấp Pro
+            <Zap className="w-3.5 h-3.5 fill-black" />
+            <span>Nạp Token</span>
           </button>
         </div>
       </header>
@@ -750,12 +771,15 @@ export default function TripoStudioCustomPage() {
       <div className="flex-1 flex overflow-hidden relative">
         {/* ── Col 1: Left Vertical Tool Rail + Settings Panel ── */}
         <aside
-          className="w-[340px] md:w-[380px] h-full min-h-0 border-r border-white/10 flex shrink-0 z-20 overflow-hidden"
-          style={{ backgroundColor: "#111218" }}
+          className="w-[340px] md:w-[380px] h-full min-h-0 border-r flex shrink-0 z-20 overflow-hidden transition-colors"
+          style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-10)" }}
           data-lenis-prevent="true"
         >
           {/* Far Left Icon Rail */}
-          <div className="w-14 h-full border-r border-white/10 flex flex-col items-center py-4 gap-5 shrink-0 bg-[#0d0e14]">
+          <div 
+            className="w-14 h-full border-r flex flex-col items-center py-4 gap-5 shrink-0 transition-colors"
+            style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-10)" }}
+          >
             <button
               className="w-9 h-9 rounded-xl flex items-center justify-center text-white bg-[#a855f7]/20 border border-[#a855f7]/50 text-[#c084fc]"
               title="Chuyển ảnh sang mô hình 3D (Image-to-3D)"
@@ -827,12 +851,15 @@ export default function TripoStudioCustomPage() {
               </div>
 
               {/* Upload / Reference Box (Thumbnail from Tripo3D screenshot) */}
-              <div className="rounded-2xl border border-white/15 bg-black/50 p-3 space-y-3">
-                <div className="flex items-center justify-between text-xs text-white/60">
+              <div
+                className="rounded-2xl border p-3 space-y-3"
+                style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-15)" }}
+              >
+                <div className="flex items-center justify-between text-xs" style={{ color: "var(--c-white-50)" }}>
                   <div className="flex items-center gap-2">
-                    <button className="p-1.5 rounded-lg bg-white/10 text-white">🖼</button>
-                    <button className="p-1.5 rounded-lg text-white/40 hover:text-white">🎲</button>
-                    <button className="p-1.5 rounded-lg text-white/40 hover:text-white">✏️</button>
+                    <button className="p-1.5 rounded-lg text-white" style={{ backgroundColor: "var(--c-white-10)" }}>🖼</button>
+                    <button className="p-1.5 rounded-lg hover:opacity-100 opacity-60">🎲</button>
+                    <button className="p-1.5 rounded-lg hover:opacity-100 opacity-60">✏️</button>
                   </div>
                   <button
                     onClick={() => fileInputRef.current?.click()}
@@ -842,7 +869,10 @@ export default function TripoStudioCustomPage() {
                   </button>
                 </div>
 
-                <div className="relative aspect-square w-full rounded-xl overflow-hidden border border-white/10 bg-[#181922] p-2 flex items-center justify-center group">
+                <div
+                  className="relative aspect-square w-full rounded-xl overflow-hidden border p-2 flex items-center justify-center group"
+                  style={{ backgroundColor: "var(--c-bg)", borderColor: "var(--c-white-10)" }}
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={referenceImg}
@@ -861,7 +891,8 @@ export default function TripoStudioCustomPage() {
 
                   <button
                     onClick={() => alert("Chế độ Multi-Views đã tạo 4 góc chụp chuẩn: Trước, Sau, Trái, Phải")}
-                    className="absolute bottom-3 left-3 right-3 py-2 rounded-xl bg-black/80 backdrop-blur-md border border-white/20 text-xs font-semibold text-white/90 hover:bg-black flex items-center justify-center gap-1.5 transition-colors"
+                    className="absolute bottom-3 left-3 right-3 py-2 rounded-xl backdrop-blur-md border text-xs font-semibold hover:opacity-90 flex items-center justify-center gap-1.5 transition-colors"
+                    style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-15)", color: "var(--c-white)" }}
                   >
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                     <span>Tạo 4 góc nhìn chuẩn</span>
@@ -878,9 +909,12 @@ export default function TripoStudioCustomPage() {
 
               {/* General Settings */}
               <div className="space-y-3 pt-1">
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 flex items-center justify-between cursor-pointer hover:bg-white/[0.04]">
-                  <span className="text-xs text-white/80">Cấu hình hình học & Vật liệu PBR</span>
-                  <ChevronRight className="w-4 h-4 text-white/40" />
+                <div
+                  className="p-3 rounded-xl border flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-10)" }}
+                >
+                  <span className="text-xs" style={{ color: "var(--c-white-80)" }}>Cấu hình hình học & Vật liệu PBR</span>
+                  <ChevronRight className="w-4 h-4" style={{ color: "var(--c-white-50)" }} />
                 </div>
 
                 {/* Members Only Section */}
@@ -889,7 +923,7 @@ export default function TripoStudioCustomPage() {
                     <span>👑 Tính năng Pro</span>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-white/70">
+                  <div className="flex items-center justify-between text-xs" style={{ color: "var(--c-white-80)" }}>
                     <div className="flex items-center gap-1.5">
                       <span>Tạo mẫu chi tiết in rời</span>
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono">Dùng thử</span>
@@ -902,7 +936,7 @@ export default function TripoStudioCustomPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-white/70">
+                  <div className="flex items-center justify-between text-xs" style={{ color: "var(--c-white-80)" }}>
                     <div className="flex items-center gap-1.5">
                       <span>Vật liệu PBR 8K siêu nét</span>
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono">Dùng thử</span>
@@ -915,12 +949,13 @@ export default function TripoStudioCustomPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-white/70">
+                  <div className="flex items-center justify-between text-xs" style={{ color: "var(--c-white-80)" }}>
                     <span>Quyền riêng tư</span>
                     <button
                       type="button"
                       onClick={() => setPrivacy(privacy === "public" ? "private" : "public")}
-                      className="text-xs text-white/90 font-mono hover:text-[#f5b942] transition-colors cursor-pointer"
+                      className="text-xs font-mono hover:text-[#f5b942] transition-colors cursor-pointer"
+                      style={{ color: "var(--c-white)" }}
                     >
                       {privacy === "public" ? "🌐 Công khai" : "🔒 Riêng tư"}
                     </button>
@@ -928,21 +963,24 @@ export default function TripoStudioCustomPage() {
                 </div>
 
                 {/* AI Model Version Selector */}
-                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
-                  <span className="text-[10px] font-mono uppercase text-white/40 block mb-1">
+                <div
+                  className="p-3 rounded-xl border"
+                  style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-10)" }}
+                >
+                  <span className="text-[10px] font-mono uppercase block mb-1" style={{ color: "var(--c-white-50)" }}>
                     Phiên bản AI
                   </span>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-white">v3.1 — Độ nét tối đa</span>
-                    <span className="text-[10px] text-white/40">Mặc định</span>
+                    <span className="text-xs font-bold" style={{ color: "var(--c-white)" }}>v3.1 — Độ nét tối đa</span>
+                    <span className="text-[10px]" style={{ color: "var(--c-white-50)" }}>Mặc định</span>
                   </div>
-                  <span className="text-[10px] text-white/40 block mt-0.5">Tối ưu hoá tính toán cho độ chính xác cơ học cao</span>
+                  <span className="text-[10px] block mt-0.5" style={{ color: "var(--c-white-50)" }}>Tối ưu hoá tính toán cho độ chính xác cơ học cao</span>
                 </div>
               </div>
             </div>
 
             {/* Bottom Generate CTA */}
-            <div className="pt-4 border-t border-white/10">
+            <div className="pt-4 border-t" style={{ borderColor: "var(--c-white-10)" }}>
               <button
                 onClick={handleStartGenerate}
                 disabled={isGenerating}
@@ -966,27 +1004,36 @@ export default function TripoStudioCustomPage() {
         </aside>
 
         {/* ── Col 2: Center 3D Stage Viewport ── */}
-        <main className="flex-1 relative overflow-hidden flex flex-col bg-[#14151d]">
+        <main className="flex-1 relative overflow-hidden flex flex-col" style={{ backgroundColor: "var(--c-bg-deep)" }}>
           {/* Top-Right Topology & Vertices Counter (Matching Screenshot exactly) */}
-          <div className="absolute top-4 right-14 z-20 flex items-center gap-6 font-mono text-xs text-white/70 pointer-events-none bg-black/40 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10">
+          <div
+            className="absolute top-4 right-14 z-20 flex items-center gap-6 font-mono text-xs pointer-events-none backdrop-blur-md px-4 py-2 rounded-xl border"
+            style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-10)", color: "var(--c-white-80)" }}
+          >
             <div>
-              <span className="text-white/40 block text-[10px]">Cấu trúc</span>
-              <span className="font-bold text-white">Lưới tam giác</span>
+              <span className="block text-[10px]" style={{ color: "var(--c-white-50)" }}>Cấu trúc</span>
+              <span className="font-bold" style={{ color: "var(--c-white)" }}>Lưới tam giác</span>
             </div>
             <div>
-              <span className="text-white/40 block text-[10px]">Mặt lưới (Faces)</span>
-              <span className="font-bold text-white">{activeAsset.faces.toLocaleString()}</span>
+              <span className="block text-[10px]" style={{ color: "var(--c-white-50)" }}>Mặt lưới (Faces)</span>
+              <span className="font-bold" style={{ color: "var(--c-white)" }}>{activeAsset.faces.toLocaleString()}</span>
             </div>
             <div>
-              <span className="text-white/40 block text-[10px]">Đỉnh (Vertices)</span>
-              <span className="font-bold text-white">{activeAsset.vertices.toLocaleString()}</span>
+              <span className="block text-[10px]" style={{ color: "var(--c-white-50)" }}>Đỉnh (Vertices)</span>
+              <span className="font-bold" style={{ color: "var(--c-white)" }}>{activeAsset.vertices.toLocaleString()}</span>
             </div>
           </div>
 
           {/* Right vertical floating tool icons (Matching Screenshot column) */}
-          <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 p-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/10 text-white/70">
+          <div
+            className="absolute top-4 right-4 z-20 flex flex-col gap-2 p-1.5 rounded-xl backdrop-blur-md border"
+            style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-10)", color: "var(--c-white-80)" }}
+          >
             {/* 3D Orientation Gizmo Cube */}
-            <div className="w-8 h-8 rounded-lg bg-black/80 flex items-center justify-center font-bold text-[10px] text-cyan-400 border border-white/10">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-[10px] text-cyan-400 border"
+              style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-10)" }}
+            >
               Y/Z
             </div>
             <button
@@ -1180,10 +1227,14 @@ export default function TripoStudioCustomPage() {
             )}
 
             {/* Bottom Floating Action Bar */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-2xl">
+            <div
+              className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl backdrop-blur-xl border shadow-2xl"
+              style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-15)", color: "var(--c-white)" }}
+            >
               <button
                 onClick={handleStartGenerate}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-white/10 text-xs font-semibold text-white/80 hover:text-white transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:opacity-80 text-xs font-semibold transition-colors cursor-pointer"
+                style={{ color: "var(--c-white-80)" }}
               >
                 <span>🟡</span>
                 <span>Thử lại</span>
@@ -1199,9 +1250,10 @@ export default function TripoStudioCustomPage() {
 
               <button
                 onClick={() => setIsFavorite(!isFavorite)}
-                className={`p-1.5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer ${
-                  isFavorite ? "text-amber-400" : "text-white/60"
+                className={`p-1.5 rounded-xl hover:opacity-80 transition-colors cursor-pointer ${
+                  isFavorite ? "text-amber-400" : ""
                 }`}
+                style={{ color: isFavorite ? undefined : "var(--c-white-50)" }}
                 title="Yêu thích"
               >
                 <Star className="w-4 h-4" />
@@ -1209,7 +1261,8 @@ export default function TripoStudioCustomPage() {
 
               <button
                 onClick={() => alert("Đã sao chép liên kết chia sẻ mô hình!")}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-white/10 text-xs font-semibold text-white/80 hover:text-white transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer hover:opacity-80"
+                style={{ color: "var(--c-white-80)" }}
               >
                 <Share2 className="w-3.5 h-3.5" />
                 <span>Chia sẻ</span>
@@ -1228,19 +1281,20 @@ export default function TripoStudioCustomPage() {
 
         {/* ── Col 3: Right Drawer (Kho Mẫu & Thông Số) ── */}
         <aside
-          className="w-[300px] md:w-[320px] h-full min-h-0 border-l border-white/10 flex flex-col shrink-0 z-20 overflow-hidden"
-          style={{ backgroundColor: "#111218" }}
+          className="w-[300px] md:w-[320px] h-full min-h-0 border-l flex flex-col shrink-0 z-20 overflow-hidden"
+          style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-10)" }}
           data-lenis-prevent="true"
         >
           {/* Drawer Top Tabs */}
-          <div className="shrink-0 flex border-b border-white/10 text-xs font-bold font-mono">
+          <div className="shrink-0 flex border-b text-xs font-bold font-mono" style={{ borderColor: "var(--c-white-10)" }}>
             <button
               onClick={() => setRightTab("assets")}
               className={`flex-1 py-3 text-center transition-colors border-b-2 cursor-pointer ${
                 rightTab === "assets"
-                  ? "border-white text-white bg-white/[0.02]"
-                  : "border-transparent text-white/40 hover:text-white"
+                  ? "border-[#f5b942] text-[#f5b942]"
+                  : "border-transparent hover:opacity-100"
               }`}
+              style={{ color: rightTab === "assets" ? undefined : "var(--c-white-50)" }}
             >
               Kho Mẫu 3D ({assetsList.length})
             </button>
@@ -1248,9 +1302,10 @@ export default function TripoStudioCustomPage() {
               onClick={() => setRightTab("property")}
               className={`flex-1 py-3 text-center transition-colors border-b-2 cursor-pointer ${
                 rightTab === "property"
-                  ? "border-white text-white bg-white/[0.02]"
-                  : "border-transparent text-white/40 hover:text-white"
+                  ? "border-[#f5b942] text-[#f5b942]"
+                  : "border-transparent hover:opacity-100"
               }`}
+              style={{ color: rightTab === "property" ? undefined : "var(--c-white-50)" }}
             >
               Thông Số Kỹ Thuật
             </button>
@@ -1264,30 +1319,30 @@ export default function TripoStudioCustomPage() {
           >
             {rightTab === "assets" ? (
               <div className="space-y-4">
-                {/* Upgrade Box */}
-                <div className="p-3.5 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 text-xs space-y-2">
+                {/* Upgrade / Top-up Box */}
+                <div className="p-3.5 rounded-xl bg-gradient-to-br from-[#22c55e]/15 to-emerald-950/30 border border-[#22c55e]/30 text-xs space-y-2">
                   <div className="flex justify-between items-start">
-                    <span className="font-bold text-amber-300">Nâng cấp Pro để mở khóa xuất file STL/GLB không giới hạn và tính năng in đa màu.</span>
+                    <span className="font-bold text-[#22c55e]">Nạp Credit Token để tạo mô hình AI 3D và xuất file STL/GLB độ nét cao.</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-white/60">Tiết kiệm 50% hôm nay</span>
+                    <span className="text-[10px]" style={{ color: "var(--c-white-50)" }}>Chỉ từ 49.000đ / gói</span>
                     <button
-                      onClick={() => alert("Nâng cấp thành viên Pro")}
-                      className="px-2.5 py-1 rounded bg-[#f5b942] text-black font-bold text-[10px] cursor-pointer"
+                      onClick={() => setShowCreditModal(true)}
+                      className="px-2.5 py-1 rounded bg-[#22c55e] text-black font-bold text-[10px] cursor-pointer hover:opacity-90 transition-opacity"
                     >
-                      Nâng cấp Pro
+                      Nạp Credits
                     </button>
                   </div>
                 </div>
 
                 {/* Filter & View icon bar */}
-                <div className="flex items-center justify-between text-xs text-white/50 px-1">
+                <div className="flex items-center justify-between text-xs px-1" style={{ color: "var(--c-white-50)" }}>
                   <div className="flex items-center gap-2">
-                    <button className="text-white">⊞</button>
-                    <button className="hover:text-white">★</button>
-                    <button className="hover:text-white">▼</button>
+                    <button style={{ color: "var(--c-white)" }}>⊞</button>
+                    <button className="hover:opacity-100">★</button>
+                    <button className="hover:opacity-100">▼</button>
                   </div>
-                  <span className="text-[11px] text-white/50">
+                  <span className="text-[11px]" style={{ color: "var(--c-white-50)" }}>
                     Bản in đã kiểm định
                   </span>
                 </div>
@@ -1295,11 +1350,12 @@ export default function TripoStudioCustomPage() {
                 {/* Upload 3D Model Tile */}
                 <button
                   onClick={() => alert("Tính năng tải file 3D trực tiếp (OBJ, FBX, STL, GLB <= 150MB) đang kết nối MinIO")}
-                  className="w-full py-4 rounded-xl border border-dashed border-white/20 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#f5b942]/50 flex flex-col items-center justify-center gap-1.5 transition-colors group cursor-pointer"
+                  className="w-full py-4 rounded-xl border border-dashed hover:border-[#f5b942]/50 flex flex-col items-center justify-center gap-1.5 transition-colors group cursor-pointer"
+                  style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-15)" }}
                 >
-                  <Box className="w-5 h-5 text-white/50 group-hover:text-[#f5b942] transition-colors" />
-                  <span className="text-xs font-bold text-white/90">Tải Lên File 3D Của Bạn</span>
-                  <span className="text-[10px] text-white/40 font-mono">GLB, STL, OBJ, FBX (Tối đa 150MB)</span>
+                  <Box className="w-5 h-5 group-hover:text-[#f5b942] transition-colors" style={{ color: "var(--c-white-50)" }} />
+                  <span className="text-xs font-bold" style={{ color: "var(--c-white)" }}>Tải Lên File 3D Của Bạn</span>
+                  <span className="text-[10px] font-mono" style={{ color: "var(--c-white-50)" }}>GLB, STL, OBJ, FBX (Tối đa 150MB)</span>
                 </button>
 
                 {/* Asset Gallery Grid */}
@@ -1318,9 +1374,12 @@ export default function TripoStudioCustomPage() {
                           className={`relative aspect-square rounded-xl overflow-hidden border cursor-pointer transition-all duration-200 group ${
                             isSelected
                               ? "border-[#a855f7] ring-2 ring-[#a855f7]/40 shadow-[0_0_15px_rgba(168,85,247,0.3)] scale-[1.02]"
-                              : "border-white/10 hover:border-white/30"
+                              : "hover:border-white/30"
                           }`}
-                          style={{ backgroundColor: "#181922" }}
+                          style={{
+                            backgroundColor: "var(--c-bg-deep)",
+                            borderColor: isSelected ? undefined : "var(--c-white-10)",
+                          }}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
@@ -1345,26 +1404,29 @@ export default function TripoStudioCustomPage() {
               /* Property Tab Content */
               <div className="space-y-5">
                 <div>
-                  <span className="text-[10px] font-mono uppercase text-white/40 block mb-1">Tên mô hình</span>
-                  <h3 className="text-base font-bold text-white">{activeAsset.name}</h3>
+                  <span className="text-[10px] font-mono uppercase block mb-1" style={{ color: "var(--c-white-50)" }}>Tên mô hình</span>
+                  <h3 className="text-base font-bold" style={{ color: "var(--c-white)" }}>{activeAsset.name}</h3>
                 </div>
 
                 {/* Mesh Statistics */}
-                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5 font-mono text-xs">
+                <div
+                  className="p-3.5 rounded-2xl border space-y-2.5 font-mono text-xs"
+                  style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-10)" }}
+                >
                   <div className="flex justify-between">
-                    <span className="text-white/40">Mặt lưới (Faces):</span>
+                    <span style={{ color: "var(--c-white-50)" }}>Mặt lưới (Faces):</span>
                     <span className="text-[#f5b942] font-bold">{activeAsset.faces.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-white/40">Đỉnh (Vertices):</span>
-                    <span className="text-white/80">{activeAsset.vertices.toLocaleString()}</span>
+                    <span style={{ color: "var(--c-white-50)" }}>Đỉnh (Vertices):</span>
+                    <span style={{ color: "var(--c-white-80)" }}>{activeAsset.vertices.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-white/40">Kích thước hoàn thiện:</span>
-                    <span className="text-white/80">{activeAsset.dimensions}</span>
+                    <span style={{ color: "var(--c-white-50)" }}>Kích thước hoàn thiện:</span>
+                    <span style={{ color: "var(--c-white-80)" }}>{activeAsset.dimensions}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-white/40">Cấu trúc đa giác:</span>
+                    <span style={{ color: "var(--c-white-50)" }}>Cấu trúc đa giác:</span>
                     <span className="text-green-400">Kín nước (Watertight Manifold)</span>
                   </div>
                 </div>
@@ -1375,15 +1437,15 @@ export default function TripoStudioCustomPage() {
                     Ước tính chế tác in 3D
                   </span>
                   <div className="flex justify-between">
-                    <span className="text-white/50">Khối lượng in:</span>
-                    <span className="text-white/90">{activeAsset.printWeight}</span>
+                    <span style={{ color: "var(--c-white-50)" }}>Khối lượng in:</span>
+                    <span style={{ color: "var(--c-white)" }}>{activeAsset.printWeight}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-white/50">Thời gian chạy máy:</span>
-                    <span className="text-white/90">{activeAsset.printTime}</span>
+                    <span style={{ color: "var(--c-white-50)" }}>Thời gian chạy máy:</span>
+                    <span style={{ color: "var(--c-white)" }}>{activeAsset.printTime}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-white/50">Giá ước tính:</span>
+                    <span style={{ color: "var(--c-white-50)" }}>Giá ước tính:</span>
                     <span className="text-[#f5b942] font-bold text-sm">450.000₫</span>
                   </div>
                 </div>
@@ -1392,7 +1454,8 @@ export default function TripoStudioCustomPage() {
                 <div className="space-y-2 pt-2">
                   <button
                     onClick={() => alert(`Đã chuẩn bị tải gói file 3D của ${activeAsset.name} (GLB, STL, OBJ).`)}
-                    className="w-full py-3 rounded-xl border border-white/20 hover:border-white/50 font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="w-full py-3 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer hover:opacity-80"
+                    style={{ borderColor: "var(--c-white-20)", color: "var(--c-white)" }}
                   >
                     <Download className="w-4 h-4" />
                     <span>Tải File 3D (GLB / STL)</span>
@@ -1411,6 +1474,12 @@ export default function TripoStudioCustomPage() {
           </div>
         </aside>
       </div>
+
+      {/* Credit Topup Modal */}
+      <CreditTopupModal
+        isOpen={showCreditModal}
+        onClose={() => setShowCreditModal(false)}
+      />
     </div>
   );
 }

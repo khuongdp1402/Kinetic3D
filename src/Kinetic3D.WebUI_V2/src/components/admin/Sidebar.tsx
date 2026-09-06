@@ -15,14 +15,17 @@ import {
   ChevronRight,
   Bell,
   CloudDownload,
+  Users,
 } from "lucide-react";
 import { customRequestsApi, ordersApi } from "@/lib/api";
+import { Kinetic3DLogo } from "@/components/brand/Kinetic3DLogo";
 
 interface NavItem {
   label: string;
   href: string;
   icon: React.ReactNode;
   badge?: number;
+  tag?: string;
 }
 
 export default function Sidebar() {
@@ -59,14 +62,15 @@ export default function Sidebar() {
       icon: <ShoppingCart size={18} />,
       badge: pendingOrders > 0 ? pendingOrders : undefined,
     },
-    { label: "Flash Sale", href: "/admin/flash-sales", icon: <Zap size={18} /> },
-    { label: "Voucher", href: "/admin/vouchers", icon: <Ticket size={18} /> },
+    { label: "Flash Sale", href: "/admin/flash-sales", icon: <Zap size={18} />, tag: "Beta" },
+    { label: "Voucher", href: "/admin/vouchers", icon: <Ticket size={18} />, tag: "Beta" },
     {
       label: "Custom Requests",
       href: "/admin/custom-requests",
       icon: <Wand2 size={18} />,
       badge: pendingCount > 0 ? pendingCount : undefined,
     },
+    { label: "Người dùng", href: "/admin/users", icon: <Users size={18} /> },
   ];
 
   const isActive = (href: string) => {
@@ -86,17 +90,7 @@ export default function Sidebar() {
           collapsed ? "justify-center" : ""
         }`}
       >
-        <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center shrink-0">
-          <span className="text-white font-black text-xs">K3D</span>
-        </div>
-        {!collapsed && (
-          <div>
-            <p className="text-white font-bold text-sm leading-tight tracking-tight">
-              KINETIC<span className="text-orange-400">3D</span>
-            </p>
-            <p className="text-neutral-500 text-[10px] tracking-widest uppercase">Admin</p>
-          </div>
-        )}
+        <Kinetic3DLogo size="sm" showText={!collapsed} showTagline={!collapsed} />
       </div>
 
       {/* Nav */}
@@ -118,6 +112,11 @@ export default function Sidebar() {
             >
               <span className={`shrink-0 ${active ? "text-orange-400" : ""}`}>{item.icon}</span>
               {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+              {!collapsed && item.tag && (
+                <span className="ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider">
+                  {item.tag}
+                </span>
+              )}
               {item.badge !== undefined && (
                 <span
                   className={`min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-bold flex items-center justify-center bg-orange-500 text-white shrink-0 ${

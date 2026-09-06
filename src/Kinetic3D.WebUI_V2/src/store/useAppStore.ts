@@ -6,14 +6,19 @@ type Language = "vi" | "en";
 
 interface AppState {
   isAuthModalOpen: boolean;
+  isCreditModalOpen: boolean;
   isSubscriptionModalOpen: boolean;
+  selectedPackageId: string | null;
   language: Language;
   currency: Currency;
   
   openAuthModal: () => void;
   closeAuthModal: () => void;
   
-  openSubscriptionModal: () => void;
+  openCreditModal: (packageId?: string) => void;
+  closeCreditModal: () => void;
+  
+  openSubscriptionModal: (packageId?: string) => void;
   closeSubscriptionModal: () => void;
   
   setLanguage: (lang: Language) => void;
@@ -24,15 +29,40 @@ export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       isAuthModalOpen: false,
+      isCreditModalOpen: false,
       isSubscriptionModalOpen: false,
+      selectedPackageId: null,
       language: "vi", // Default to Vietnamese
       currency: "VND", // Default to VND
       
       openAuthModal: () => set({ isAuthModalOpen: true }),
       closeAuthModal: () => set({ isAuthModalOpen: false }),
       
-      openSubscriptionModal: () => set({ isSubscriptionModalOpen: true }),
-      closeSubscriptionModal: () => set({ isSubscriptionModalOpen: false }),
+      openCreditModal: (packageId) =>
+        set({
+          isCreditModalOpen: true,
+          isSubscriptionModalOpen: true,
+          selectedPackageId: packageId || null,
+        }),
+      closeCreditModal: () =>
+        set({
+          isCreditModalOpen: false,
+          isSubscriptionModalOpen: false,
+          selectedPackageId: null,
+        }),
+      
+      openSubscriptionModal: (packageId) =>
+        set({
+          isCreditModalOpen: true,
+          isSubscriptionModalOpen: true,
+          selectedPackageId: packageId || null,
+        }),
+      closeSubscriptionModal: () =>
+        set({
+          isCreditModalOpen: false,
+          isSubscriptionModalOpen: false,
+          selectedPackageId: null,
+        }),
       
       setLanguage: (lang) => set({ language: lang }),
       setCurrency: (currency) => set({ currency }),

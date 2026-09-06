@@ -16,4 +16,6 @@ public class RegisterCommand : IRequest<AuthResultDto>
 
     [Required(ErrorMessage = "Tên hiển thị là bắt buộc.")]
     public string DisplayName { get; set; } = string.Empty;
+
+    public string? DeviceHash { get; set; }
 }

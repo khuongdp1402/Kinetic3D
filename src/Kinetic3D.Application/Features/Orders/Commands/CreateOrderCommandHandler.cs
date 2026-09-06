@@ -19,11 +19,16 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ITelegramNotificationService _telegramNotificationService;
 
-    public CreateOrderCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+    public CreateOrderCommandHandler(
+        IApplicationDbContext context,
+        ICurrentUserService currentUserService,
+        ITelegramNotificationService telegramNotificationService)
     {
         _context = context;
         _currentUserService = currentUserService;
+        _telegramNotificationService = telegramNotificationService;
     }
 
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -83,6 +88,9 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 
         _context.Orders.Add(order);
         await _context.SaveChangesAsync(cancellationToken);
+
+        // Fire and forget or await telegram notification safely
+        _ = _telegramNotificationService.SendOrderCreatedNotificationAsync(order, cancellationToken);
 
         return order.ToDto();
     }

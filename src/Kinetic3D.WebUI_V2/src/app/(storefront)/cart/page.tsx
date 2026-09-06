@@ -2,27 +2,32 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useAppStore } from "@/store/useAppStore";
+import { Kinetic3DLogo } from "@/components/brand/Kinetic3DLogo";
 
 function fmtVND(n: number) {
   return n.toLocaleString("vi-VN") + "₫";
 }
 
 export default function CartPage() {
+  const router = useRouter();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+  const { openAuthModal } = useAppStore();
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const shipping = items.length > 0 ? 30000 : 0;
   const total = subtotal + shipping;
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen pt-16 flex items-center justify-center relative z-10" style={{ color: "var(--c-white)" }}>
-        <div className="text-center">
-          <div
-            className="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full"
-            style={{ border: "1px solid var(--c-white-10)", backgroundColor: "var(--c-bg-deep)" }}
-          >
-            <span className="text-3xl" style={{ color: "var(--c-white-30)" }}>∅</span>
+      <div className="min-h-screen pt-16 flex items-center justify-center relative z-10 px-4" style={{ color: "var(--c-white)" }}>
+        <div className="text-center max-w-md">
+          <div className="flex justify-center mb-6">
+            <Kinetic3DLogo size="lg" showTagline={true} />
           </div>
           <h1 className="text-2xl font-bold tracking-[-0.02em] mb-2" style={{ color: "var(--c-white)" }}>
             Giỏ hàng của bạn đang trống
@@ -46,13 +51,18 @@ export default function CartPage() {
     <div className="min-h-screen pt-16 relative z-10" style={{ color: "var(--c-white)" }}>
       {/* Header */}
       <div className="py-12 px-6" style={{ borderBottom: "1px solid var(--c-white-10)" }}>
-        <div className="max-w-[var(--container-max)] mx-auto">
-          <span className="text-xs uppercase tracking-[0.2em] block mb-3" style={{ color: "var(--c-lime)", fontFamily: "var(--font-mono)" }}>
-            {items.length} {items.length === 1 ? "sản phẩm" : "sản phẩm"}
-          </span>
-          <h1 className="text-4xl font-bold tracking-[-0.03em]" style={{ color: "var(--c-white)" }}>
-            Giỏ hàng
-          </h1>
+        <div className="max-w-[var(--container-max)] mx-auto flex items-center justify-between">
+          <div>
+            <span className="text-xs uppercase tracking-[0.2em] block mb-2" style={{ color: "var(--c-lime)", fontFamily: "var(--font-mono)" }}>
+              {items.length} {items.length === 1 ? "sản phẩm" : "sản phẩm"}
+            </span>
+            <h1 className="text-4xl font-bold tracking-[-0.03em]" style={{ color: "var(--c-white)" }}>
+              Giỏ hàng
+            </h1>
+          </div>
+          <div className="shrink-0 hidden md:block">
+            <Kinetic3DLogo size="sm" showTagline={false} />
+          </div>
         </div>
       </div>
 
@@ -82,7 +92,7 @@ export default function CartPage() {
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 relative flex-shrink-0 rounded-md overflow-hidden" style={{ backgroundColor: "var(--c-bg-deep)", border: "1px solid var(--c-white-10)" }}>
                     <Image
-                      src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=100&auto=format&fit=crop"
+                      src={item.image || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=100&auto=format&fit=crop"}
                       alt={item.name}
                       fill
                       className="object-cover"
@@ -187,17 +197,25 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <Link
-                href="/checkout"
-                className="block w-full py-4 text-center text-xs font-bold uppercase tracking-[0.2em] transition-all duration-300 rounded-md"
+              <button
+                type="button"
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    openAuthModal();
+                  } else {
+                    router.push("/checkout");
+                  }
+                }}
+                className="w-full py-4 text-center text-xs font-bold uppercase tracking-[0.2em] transition-all duration-300 rounded-md hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
                 style={{
                   backgroundColor: "var(--c-lime)",
-                  color: "#ffffff",
+                  color: "#000000",
                   fontFamily: "var(--font-mono)",
                 }}
               >
-                Tiến hành thanh toán
-              </Link>
+                {!isAuthenticated && <Lock size={14} />}
+                <span>Tiến hành thanh toán</span>
+              </button>
             </div>
           </div>
         </div>

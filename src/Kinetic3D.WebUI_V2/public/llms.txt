@@ -1,22 +1,48 @@
 # Kinetic3D — Digital 3D Fabrication Platform & Custom Workshop
 
-> Kinetic3D is a disruptive 3D e-commerce platform and custom manufacturing workshop based in Vietnam, offering automated multi-material 3D printing (AMS), an AI-driven image-to-3D generator, and an interactive real-time 3D product configurator.
+> Kinetic3D is the leading Vietnamese on-demand additive manufacturing platform and futuristic 3D e-commerce ecosystem. It fuses automated multi-material 3D printing (Bambu AMS / SLA Resin), real-time 3D WebGL interactive visualization (Three.js), an AI-driven image-to-3D generator, and automated VietQR banking reconciliation powered by Casso.
+
+## Primary Entity Information
+- **Name:** Kinetic3D
+- **Legal Entity:** Kinetic Technologies Vietnam Co., Ltd.
+- **Industry:** Additive Manufacturing, Rapid Prototyping, 3D E-commerce, Generative 3D AI
+- **Headquarters:** High-Tech Park, Thu Duc City, Ho Chi Minh City, Vietnam
+- **Contact:** Hotline: 0988.888.888 | Email: contact@kinetic3d.vn
+- **Official Website:** https://kinetic3d.vn
 
 ## Core Capabilities & Services
-- **AMS Multi-Color 3D Printing:** High-precision multi-filament FDM and SLA resin manufacturing for intricate mechanical models, anime figurines, and functional prototypes.
-- **AI Image-to-3D Studio:** Automated generation of game-ready quad meshes (500 to 2M polygons) and full PBR texture sets from 2D sketches or photographs.
-- **On-Demand Custom Fabrication:** Upload STL/OBJ/STEP files for volume-based instant quotes with PLA+, PETG, Resin, or Carbon-fiber materials.
-- **Ready-to-Ship Cyber-Tech Catalog:** Smart charging docks, artisan resin keycaps, and desktop display pieces.
+- **AMS Multi-Color 3D Printing:** Industrial-grade multi-filament FDM and SLA resin manufacturing supporting up to 8 simultaneous colors, ideal for mechanical assemblies, anime figurines, and functional prototypes.
+- **AI Image-to-3D Studio:** Generates watertight, game-ready quad meshes (500 to 2M polygons) with complete PBR textures directly from 2D photos or text prompts.
+- **On-Demand Custom Fabrication:** Instant volume calculation, slicer preview, and real-time quoting for custom STL, OBJ, 3MF, and STEP uploads.
+- **Precision Engineered Catalog:** Ready-to-ship cyber-tech EDC items, high-performance charging docks, artisan mechanical keycaps, and desktop display pieces.
+- **Live Production Telemetry:** Real-time 5-stage tracking of slicing, printing, and shipping status via order numbers (`KN3D-yyyyMMdd-XXXXXX`) or phone numbers.
 
-## Key URLs
-- Homepage & 3D Showcase: /
-- Catalog & Instant Search: /products
-- Category Collections: /categories
-- Custom 3D Printing Service: /custom
-- About Studio & Equipment: /about
+## Pricing & Membership Tiers
+- **Free Starter (0₫/lifetime):** 50 starter credits, 60-120 FPS WebGL viewer, standard queue.
+- **Pro Workshop (199.000₫/month or 165.000₫/month annually):** 500 AI credits/month, unlimited STL/GLB downloads, quad retopology, AMS multi-color printing unlocked.
+- **Studio Enterprise (890.000₫/month):** Unlimited AI generation, dedicated 1-on-1 CAD engineer support, aerospace materials (Carbon Fiber, PEEK, dental resin), electronic VAT invoicing.
 
-## Technical Specifications & Tolerances
-- **FDM Printing Precision:** Layer height 0.08mm - 0.28mm, dimensional tolerance ±0.1mm.
-- **SLA Resin Precision:** Layer height 0.02mm, ultra-smooth surface finish.
-- **Materials:** PLA+, PETG, TPU Flexible, High-temp ABS, High-detail Water-washable Resin, Tough Resin.
-- **Payment Methods:** Automated VietQR Banking Transfer (Casso integration), Cash on Delivery (COD).
+## Payment & Fulfillment Protocols
+- **Automated VietQR:** Instant 24/7 bank transfer matching via Casso (MBBank STK 0988888888, recipient: CONG TY KINETIC3D). Orders automatically trigger workshop 3D print queues and Telegram alerts upon payment receipt.
+- **Cash on Delivery (COD):** Nationwide delivery with full unboxing inspection rights (đồng kiểm).
+- **Turnaround Times:** Printing in 12-36 hours. Delivery within 24 hours for Hanoi & Ho Chi Minh City; 48-72 hours nationwide via express courier.
+- **Warranty & Quality Guarantee:** 100% free reprint or full refund within 7 days if dimensional deviation exceeds ±0.25mm or in case of transit breakage.
+
+## Site Structure & Key URLs
+- Homepage & Interactive Orbit: `/`
+- Product Catalog & Instant Search: `/products`
+- Category Collections: `/categories`
+- AI 3D Custom Workshop: `/custom`
+- Pricing & Pro Upgrade: `/pricing`
+- Live Order Tracking: `/tracking`
+- About Studio & Equipment: `/about`
+- Terms of Service & IP Rights: `/policies/terms`
+- Warranty & Refund Policy: `/policies/refund`
+- Shipping & Inspection Policy: `/policies/shipping`
+- Privacy & CAD Data Security: `/policies/privacy`
+
+## Technical Tolerances & Specifications
+- **FDM Layer Height:** 0.08mm – 0.28mm (±0.1mm standard mechanical tolerance)
+- **SLA Resin Resolution:** 0.02mm layer height (19 micron optical resolution)
+- **Approved Filaments:** PLA+ Matte, PETG Tough, TPU 95A Flexible, ABS-GF, Carbon Fiber Polycarbonate, 12K Water-Washable Resin.
+- **Supported 3D Formats:** STL, OBJ, GLB, 3MF, STEP, FBX.

@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
 import type { ProductDto } from "@/types/api";
 import { SplitRevealImage } from "@/components/storefront/SplitRevealImage";
+import { Heart } from "lucide-react";
 
 interface ProductCardNewProps {
   product: ProductDto;
@@ -11,8 +13,25 @@ interface ProductCardNewProps {
 
 export function ProductCardNew({ product }: ProductCardNewProps) {
   const addItem = useCartStore((s) => s.addItem);
+  const { toggleItem, isInWishlist } = useWishlistStore();
+  const isWished = isInWishlist(product.id);
   const color = product.colors[0] ?? "";
   const size = product.sizes[0] ?? "";
+
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleItem({
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.basePrice,
+      imageUrl: product.images[0] || product.imageUrl || "",
+      categoryName: product.category?.name,
+      shortDescription: product.shortDescription || "",
+      model3DUrl: product.model3DUrl,
+    });
+  };
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -44,6 +63,21 @@ export function ProductCardNew({ product }: ProductCardNewProps) {
           className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to top, var(--c-bg-card) 0%, transparent 50%)" }}
         />
+
+        {/* Wishlist Heart Toggle */}
+        <button
+          type="button"
+          onClick={handleToggleWishlist}
+          aria-label={isWished ? "Bỏ yêu thích" : "Thêm vào yêu thích"}
+          className={`absolute top-3 left-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer backdrop-blur-md ${
+            isWished 
+              ? "bg-red-500/20 text-red-500 border border-red-500/40 scale-110 shadow-[0_0_15px_rgba(239,68,68,0.3)]" 
+              : "bg-black/40 hover:bg-black/60 text-white/70 hover:text-white border border-white/10"
+          }`}
+        >
+          <Heart className={`w-4 h-4 ${isWished ? "fill-red-500" : ""}`} />
+        </button>
+
         {/* Category tag */}
         <span
           className="absolute top-3 right-3 text-[10px] uppercase tracking-[0.2em] px-2 py-1"

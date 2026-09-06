@@ -33,6 +33,8 @@ namespace Kinetic3D.Infrastructure
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+            services.AddScoped<ITelegramNotificationService, TelegramNotificationService>();
+
             return services;
         }
     }

@@ -14,6 +14,7 @@ public interface IApplicationDbContext
     DbSet<OrderItem> OrderItems { get; }
     DbSet<User> Users { get; }
     DbSet<CustomRequest> CustomRequests { get; }
+    DbSet<DeviceClaim> DeviceClaims { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

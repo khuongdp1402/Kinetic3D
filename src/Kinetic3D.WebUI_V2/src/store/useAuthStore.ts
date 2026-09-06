@@ -5,9 +5,10 @@ export interface UserProfile {
   id: string;
   email: string;
   displayName: string;
-  avatar: string;
-  tier: "Free" | "Starter" | "Pro" | "Max" | "Team";
-  credits: number;
+  avatar?: string;
+  role?: string;
+  tier?: "Free" | "Starter" | "Pro" | "Max" | "Team";
+  credits?: number;
 }
 
 interface AuthState {
@@ -16,6 +17,8 @@ interface AuthState {
   token: string | null;
   login: (token: string, user: UserProfile) => void;
   logout: () => void;
+  updateCredits: (credits: number) => void;
+  addCredits: (amount: number) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -26,6 +29,14 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       login: (token, user) => set({ isAuthenticated: true, user, token }),
       logout: () => set({ isAuthenticated: false, user: null, token: null }),
+      updateCredits: (credits) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, credits } : null,
+        })),
+      addCredits: (amount) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, credits: (state.user.credits || 0) + amount } : null,
+        })),
     }),
     {
       name: "kinetic3d-auth",

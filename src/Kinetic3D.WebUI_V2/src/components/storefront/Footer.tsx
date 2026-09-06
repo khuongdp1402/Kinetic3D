@@ -2,18 +2,28 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ShieldCheck, QrCode, Phone, Mail, MapPin, Printer } from "lucide-react";
+import { Kinetic3DLogo } from "@/components/brand/Kinetic3DLogo";
 
-const navLinks = [
-  { label: "Sản phẩm", href: "/products" },
-  { label: "Danh mục", href: "/categories" },
-  { label: "Custom", href: "/custom" },
-  { label: "Giới thiệu", href: "/about" },
-  { label: "Giỏ hàng", href: "/cart" },
+const discoverLinks = [
+  { label: "Tất cả sản phẩm", href: "/products" },
+  { label: "Bộ sưu tập danh mục", href: "/categories" },
+  { label: "Xưởng in 3D Custom", href: "/custom" },
+  { label: "Bảng giá & Gói Pro", href: "/pricing" },
 ];
 
-const contactInfo = [
-  { label: "hello@kinetic3d.io", href: "mailto:hello@kinetic3d.io" },
-  { label: "+84 (0) 90 000 0000", href: "tel:+84900000000" },
+const supportLinks = [
+  { label: "Tra cứu tiến độ in 3D", href: "/tracking", badge: "Live" },
+  { label: "Giỏ hàng của bạn", href: "/cart" },
+  { label: "Danh sách yêu thích", href: "/wishlist" },
+  { label: "Về Kinetic3D Studio", href: "/about" },
+];
+
+const policyLinks = [
+  { label: "Điều khoản dịch vụ", href: "/policies/terms" },
+  { label: "Chính sách đổi trả & hoàn tiền", href: "/policies/refund" },
+  { label: "Vận chuyển & đồng kiểm", href: "/policies/shipping" },
+  { label: "Bảo mật thông tin & CAD", href: "/policies/privacy" },
 ];
 
 export function Footer() {
@@ -25,42 +35,69 @@ export function Footer() {
   }
 
   return (
-    <footer className="w-full relative z-10 border-t" style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-10)" }}>
-      {/* Main Footer */}
+    <footer className="w-full relative z-10 border-t transition-colors" style={{ backgroundColor: "var(--c-bg-deep)", borderColor: "var(--c-white-10)" }}>
+      {/* Main Footer Content */}
       <div className="max-w-[var(--container-max)] mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          {/* Col 1 — Brand */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-bold tracking-tighter" style={{ color: "var(--c-white)" }}>
-                KINETIC
-              </span>
-              <span className="text-2xl font-bold tracking-tighter" style={{ color: "var(--c-lime)" }}>
-                3D
-              </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+          {/* Col 1 — Brand & Trust */}
+          <div className="lg:col-span-2 space-y-4">
+            <Link href="/" className="inline-block">
+              <Kinetic3DLogo size="lg" showTagline={true} />
             </Link>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--c-white-50)", fontFamily: "var(--font-mono)" }}>
-              Nền tảng in 3D cá nhân hoá. Từ ý tưởng số đến vật thể độc bản — độ chính xác dưới 10 micron.
+            <p className="text-sm leading-relaxed max-w-sm" style={{ color: "var(--c-white-60)", fontFamily: "var(--font-mono)" }}>
+              Nền tảng thương mại điện tử 3D & xưởng chế tác kỹ thuật số đột phá. Từ tệp CAD đến sản phẩm in đa màu chuẩn cơ khí — độ phân giải tới 19 micron.
             </p>
+            
+            {/* Trust Badges */}
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <div 
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border"
+                style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-15)", color: "var(--c-lime)" }}
+              >
+                <QrCode size={13} />
+                <span>Chuyển Khoản Ngân Hàng 24/7</span>
+              </div>
+              <div 
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border"
+                style={{ backgroundColor: "var(--c-bg-card)", borderColor: "var(--c-white-15)", color: "var(--c-orange)" }}
+              >
+                <ShieldCheck size={13} />
+                <span>Bảo Hành In Lại 100%</span>
+              </div>
+            </div>
+
+            {/* Address */}
+            <div className="pt-2 text-xs space-y-2 font-mono" style={{ color: "var(--c-white-50)" }}>
+              <p className="flex items-center gap-2">
+                <MapPin size={14} className="shrink-0 text-amber-400" />
+                <span>Khu Công Nghệ Cao TP. Thủ Đức, TP. Hồ Chí Minh</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone size={14} className="shrink-0 text-amber-400" />
+                <span>Hotline Kỹ Thuật: 0988.888.888</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail size={14} className="shrink-0 text-amber-400" />
+                <span>Email: contact@kinetic3d.vn</span>
+              </p>
+            </div>
           </div>
 
-          {/* Col 2 — Navigation */}
+          {/* Col 2 — Khám Phá */}
           <div>
             <h3
-              className="text-xs font-bold uppercase tracking-[0.2em] mb-6"
+              className="text-xs font-bold uppercase tracking-[0.2em] mb-5"
               style={{ color: "var(--c-orange)", fontFamily: "var(--font-mono)" }}
             >
-              Điều hướng
+              Khám Phá
             </h3>
-            <ul className="space-y-3">
-              {navLinks.map((link) => (
+            <ul className="space-y-2.5">
+              {discoverLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="link-hover text-sm transition-colors"
+                    className="link-hover text-xs transition-colors hover:underline"
                     style={{ color: "var(--c-white-80)", fontFamily: "var(--font-mono)" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--c-lime)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--c-white-80)")}
                   >
                     {link.label}
                   </Link>
@@ -69,88 +106,75 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 3 — Liên hệ */}
+          {/* Col 3 — Hỗ Trợ Khách Hàng */}
           <div>
             <h3
-              className="text-xs font-bold uppercase tracking-[0.2em] mb-6"
+              className="text-xs font-bold uppercase tracking-[0.2em] mb-5"
               style={{ color: "var(--c-orange)", fontFamily: "var(--font-mono)" }}
             >
-              Liên hệ
+              Hỗ Trợ
             </h3>
-            <ul className="space-y-3">
-              {contactInfo.map((item) => (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    className="link-hover text-sm transition-colors"
+            <ul className="space-y-2.5">
+              {supportLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="link-hover text-xs transition-colors hover:underline inline-flex items-center gap-1.5"
                     style={{ color: "var(--c-white-80)", fontFamily: "var(--font-mono)" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--c-lime)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--c-white-80)")}
                   >
-                    {item.label}
-                  </a>
+                    <span>{link.label}</span>
+                    {link.badge && (
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        {link.badge}
+                      </span>
+                    )}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Col 4 — Newsletter */}
+          {/* Col 4 — Chính Sách & Pháp Lý */}
           <div>
             <h3
-              className="text-xs font-bold uppercase tracking-[0.2em] mb-6"
+              className="text-xs font-bold uppercase tracking-[0.2em] mb-5"
               style={{ color: "var(--c-orange)", fontFamily: "var(--font-mono)" }}
             >
-              Bản tin
+              Chính Sách
             </h3>
-            <p className="text-sm mb-4" style={{ color: "var(--c-white-50)" }}>
-              Nhận thông báo về chất liệu và tính năng mới.
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Đăng ký thành công! (Demo)");
-              }}
-              className="flex"
-            >
-              <input
-                type="email"
-                placeholder="ban@email.com"
-                className="flex-1 px-3 py-2 text-sm rounded-l outline-none transition-colors"
-                style={{
-                  backgroundColor: "var(--c-bg)",
-                  border: "1px solid var(--c-white-15)",
-                  color: "var(--c-white)",
-                  fontFamily: "var(--font-mono)",
-                }}
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-r transition-opacity hover:opacity-80"
-                style={{
-                  backgroundColor: "var(--c-orange)",
-                  color: "#ffffff",
-                  fontFamily: "var(--font-mono)",
-                }}
-              >
-                →
-              </button>
-            </form>
+            <ul className="space-y-2.5">
+              {policyLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="link-hover text-xs transition-colors hover:underline"
+                    style={{ color: "var(--c-white-80)", fontFamily: "var(--font-mono)" }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Legal Bar */}
       <div
         className="border-t px-6 py-4"
         style={{ borderColor: "var(--c-white-10)" }}
       >
-        <div className="max-w-[var(--container-max)] mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-          <span className="text-xs" style={{ color: "var(--c-white-30)", fontFamily: "var(--font-mono)" }}>
-            © {new Date().getFullYear()} Kinetic3D. Bản quyền đã được bảo hộ.
+        <div className="max-w-[var(--container-max)] mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          <span className="text-xs" style={{ color: "var(--c-white-40)", fontFamily: "var(--font-mono)" }}>
+            © {new Date().getFullYear()} Kinetic3D Vietnam Co., Ltd. Tất cả quyền được bảo lưu.
           </span>
-          <span className="text-xs" style={{ color: "var(--c-white-30)", fontFamily: "var(--font-mono)" }}>
-            Powered by Kinetic3D Engine v3.0
-          </span>
+          <div className="flex items-center gap-4 text-xs" style={{ color: "var(--c-white-40)", fontFamily: "var(--font-mono)" }}>
+            <Link href="/policies/terms" className="hover:underline">Điều khoản</Link>
+            <span>•</span>
+            <Link href="/policies/privacy" className="hover:underline">Bảo mật</Link>
+            <span>•</span>
+            <Link href="/tracking" className="hover:underline">Tra cứu đơn hàng</Link>
+          </div>
         </div>
       </div>
     </footer>

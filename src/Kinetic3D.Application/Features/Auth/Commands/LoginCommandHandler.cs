@@ -28,6 +28,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResultDto>
         }
 
         var token = _jwtTokenGenerator.GenerateToken(user);
-        return new AuthResultDto(user.Id, user.Email, user.DisplayName, user.Role, token);
+        return new AuthResultDto(user.Id, user.Email, user.DisplayName, user.Role, token, user.Credits);
     }
 }

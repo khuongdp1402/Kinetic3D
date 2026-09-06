@@ -2,7 +2,7 @@ import Header from "@/components/storefront/Header";
 import { Footer } from "@/components/storefront/Footer";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import { AuthModal } from "@/components/auth/AuthModal";
-import { SubscriptionModal } from "@/components/subscription/SubscriptionModal";
+import { CreditTopupModal } from "@/components/billing/CreditTopupModal";
 
 export default function StorefrontLayout({
   children,
@@ -19,7 +19,7 @@ export default function StorefrontLayout({
       
       {/* Global Modals */}
       <AuthModal />
-      <SubscriptionModal />
+      <CreditTopupModal />
     </>
   );
 }
