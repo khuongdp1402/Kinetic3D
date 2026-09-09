@@ -106,20 +106,9 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <button
-                type="button"
-                onClick={() => openComingSoonModal("Bảng Giá & Gói Dịch Vụ Token Studio")}
-                className="text-sm font-medium transition-colors cursor-pointer"
-                style={{ color: textMutedColor }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = textColor)}
-                onMouseLeave={(e) => (e.currentTarget.style.color = textMutedColor)}
-              >
-                Bảng giá
-              </button>
-              <button
-                type="button"
-                onClick={() => openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator")}
-                className="flex items-center gap-1.5 text-sm font-bold transition-all hover:scale-105 cursor-pointer"
+              <Link
+                href="/custom"
+                className="flex items-center gap-1.5 text-sm font-bold transition-all hover:scale-105"
                 style={{ color: "var(--c-lime)" }}
               >
                 <Sparkles className="w-4 h-4" />
@@ -127,7 +116,7 @@ export default function Header() {
                 <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[var(--c-lime)]/15 border border-[var(--c-lime)]/30 uppercase">
                   Beta
                 </span>
-              </button>
+              </Link>
             </nav>
           </div>
 
@@ -204,7 +193,13 @@ export default function Header() {
 
             {/* Upgrade CTA */}
             <button
-              onClick={() => openComingSoonModal("Gói Dịch Vụ Studio Pro & Enterprise")}
+              onClick={() => {
+                if (!isAuthenticated) {
+                  openAuthModal();
+                } else {
+                  openCreditModal();
+                }
+              }}
               className="hidden sm:flex items-center gap-1.5 text-xs font-bold tracking-wider px-4 py-2 rounded-full transition-all hover:scale-105 cursor-pointer"
               style={{
                 backgroundColor: "var(--c-orange)",
@@ -250,23 +245,9 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <button
-            type="button"
-            onClick={() => {
-              setMobileOpen(false);
-              openComingSoonModal("Bảng Giá & Gói Dịch Vụ Token Studio");
-            }}
-            className="text-3xl font-bold tracking-[-0.03em] transition-colors"
-            style={{ color: "var(--c-white)" }}
-          >
-            Bảng giá
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMobileOpen(false);
-              openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator");
-            }}
+          <Link
+            href="/custom"
+            onClick={() => setMobileOpen(false)}
             className="text-2xl font-bold tracking-[-0.03em] transition-colors flex items-center gap-2"
             style={{ color: "var(--c-lime)" }}
           >
@@ -275,14 +256,18 @@ export default function Header() {
             <span className="text-xs px-2 py-0.5 rounded bg-[var(--c-lime)]/20 uppercase font-mono">
               Beta
             </span>
-          </button>
+          </Link>
           <button
             type="button"
             onClick={() => {
               setMobileOpen(false);
-              openComingSoonModal("Gói Dịch Vụ Studio Pro & Enterprise");
+              if (!isAuthenticated) {
+                openAuthModal();
+              } else {
+                openCreditModal();
+              }
             }}
-            className="text-2xl font-bold tracking-[-0.03em] transition-colors flex items-center gap-2"
+            className="text-2xl font-bold tracking-[-0.03em] transition-colors flex items-center gap-2 cursor-pointer"
             style={{ color: "var(--c-orange)" }}
           >
             <Zap className="w-6 h-6 fill-current" />

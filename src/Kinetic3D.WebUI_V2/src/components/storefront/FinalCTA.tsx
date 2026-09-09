@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useAppStore } from "@/store/useAppStore";
 import { useState } from "react";
 
 export function FinalCTA() {
-  const { openComingSoonModal } = useAppStore();
   const [nlEmail, setNlEmail] = useState("");
   const [nlSuccess, setNlSuccess] = useState(false);
 
@@ -92,9 +90,8 @@ export function FinalCTA() {
               Khám Phá Catalog →
             </Link>
 
-            <button
-              type="button"
-              onClick={() => openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator")}
+            <Link
+              href="/custom"
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] border hover:border-[#f5b942] hover:text-[#f5b942] cursor-pointer"
               style={{
                 borderColor: "var(--c-white-15)",
@@ -102,7 +99,7 @@ export function FinalCTA() {
               }}
             >
               Tạo Custom 3D
-            </button>
+            </Link>
           </div>
 
           {/* Newsletter */}

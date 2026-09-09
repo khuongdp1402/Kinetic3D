@@ -16,7 +16,6 @@ import {
   Plus,
   Minus
 } from "lucide-react";
-import { useAppStore } from "@/store/useAppStore";
 
 export interface OrbitProduct {
   id: string;
@@ -121,7 +120,6 @@ export const ORBIT_PRODUCTS: OrbitProduct[] = [
 ];
 
 export function CircularTechOrbit() {
-  const { openComingSoonModal } = useAppStore();
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(1);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -284,9 +282,8 @@ export function CircularTechOrbit() {
                 </Link>
 
                 {/* Secondary Studio Button */}
-                <button
-                  type="button"
-                  onClick={() => openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator")}
+                <Link
+                  href="/custom"
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-3.5 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer hover:border-[#f5b942]/50 hover:bg-[#f5b942]/10"
                   style={{
                     backgroundColor: "var(--c-bg-card)",
@@ -297,7 +294,7 @@ export function CircularTechOrbit() {
                 >
                   <Box className="w-4 h-4 text-[#f5b942]" />
                   <span className="hidden sm:inline">3D Studio</span>
-                </button>
+                </Link>
               </div>
 
               {/* Navigation & Progress Row */}
