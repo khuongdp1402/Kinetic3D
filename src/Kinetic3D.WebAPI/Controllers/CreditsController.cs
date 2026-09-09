@@ -118,10 +118,10 @@ public class CreditsController : ControllerBase
         var topupCode = $"KINETIC_CREDITS_{DateTime.UtcNow:MMddHHmm}_{Guid.NewGuid().ToString("N")[..4].ToUpper()}";
         decimal amount = request.Currency.ToUpper() == "USD" ? pkg.PriceUsd : pkg.PriceVnd;
 
-        // Casso VietQR Details for MBBank
-        var bankId = "MBBank";
-        var accountNo = "0988888888";
-        var accountName = "CONG TY KINETIC3D";
+        // Casso VietQR Details for Timo (Ban Viet Bank)
+        var bankId = "TIMO";
+        var accountNo = "9021597313131";
+        var accountName = "DO PHU KHUONG";
         var qrUrl = $"https://img.vietqr.io/image/{bankId}-{accountNo}-compact2.png?amount={(long)pkg.PriceVnd}&addInfo={topupCode}&accountName={Uri.EscapeDataString(accountName)}";
 
         return Ok(new

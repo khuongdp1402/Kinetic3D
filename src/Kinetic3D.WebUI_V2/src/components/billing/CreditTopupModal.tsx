@@ -96,11 +96,11 @@ export function CreditTopupModal({
       const topupCode = `KINETIC_${Date.now().toString().slice(-6)}`;
       setQrDetails({
         topupCode,
-        qrUrl: `https://img.vietqr.io/image/MBBank-0988888888-compact2.png?amount=${pkg.priceVnd}&addInfo=${topupCode}&accountName=CONG%20TY%20KINETIC3D`,
+        qrUrl: `https://img.vietqr.io/image/TIMO-9021597313131-compact2.png?amount=${pkg.priceVnd}&addInfo=${topupCode}&accountName=DO%20PHU%20KHUONG`,
         amount: pkg.priceVnd,
-        bankId: "MBBank",
-        accountNo: "0988888888",
-        accountName: "CONG TY KINETIC3D",
+        bankId: "TIMO",
+        accountNo: "9021597313131",
+        accountName: "DO PHU KHUONG",
         totalCredits: pkg.credits + pkg.bonusCredits,
       });
       setStep("payment");

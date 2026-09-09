@@ -7,8 +7,10 @@ using Kinetic3D.Application.Features.Auth.Commands;
 using Kinetic3D.Application.Features.Auth.DTOs;
 using Kinetic3D.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Kinetic3D.WebAPI.Controllers;
 
@@ -272,5 +274,101 @@ public class AuthController : ControllerBase
 
         var token = _jwtTokenGenerator.GenerateToken(user);
         return Ok(new AuthResultDto(user.Id, user.Email, user.DisplayName, user.Role, token, user.Credits));
+    }
+
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<IActionResult> GetCurrentUser(CancellationToken cancellationToken)
+    {
+        var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        if (user == null)
+            return NotFound();
+
+        return Ok(new
+        {
+            user.Id,
+            user.Email,
+            user.DisplayName,
+            user.Role,
+            user.Credits,
+            user.AvatarUrl,
+            user.CreatedAt
+        });
+    }
+
+    public class UpdateProfileRequest
+    {
+        public string? DisplayName { get; set; }
+        public string? AvatarUrl { get; set; }
+    }
+
+    [HttpPut("profile")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request, CancellationToken cancellationToken)
+    {
+        var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        if (user == null)
+            return NotFound();
+
+        if (!string.IsNullOrWhiteSpace(request.DisplayName))
+            user.DisplayName = request.DisplayName.Trim();
+
+        if (request.AvatarUrl != null)
+            user.AvatarUrl = request.AvatarUrl.Trim();
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Ok(new
+        {
+            user.Id,
+            user.Email,
+            user.DisplayName,
+            user.Role,
+            user.Credits,
+            user.AvatarUrl
+        });
+    }
+
+    public class ChangePasswordRequest
+    {
+        public string CurrentPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
+    }
+
+    [HttpPut("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request, CancellationToken cancellationToken)
+    {
+        var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!Guid.TryParse(userIdStr, out var userId))
+            return Unauthorized();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        if (user == null)
+            return NotFound();
+
+        if (string.IsNullOrWhiteSpace(request.NewPassword) || request.NewPassword.Length < 6)
+            return BadRequest(new { message = "Mật khẩu mới phải có tối thiểu 6 ký tự." });
+
+        if (!string.IsNullOrEmpty(user.PasswordHash))
+        {
+            bool isValid = false;
+            try { isValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash); } catch {}
+            if (!isValid)
+                return BadRequest(new { message = "Mật khẩu hiện tại không chính xác." });
+        }
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Ok(new { message = "Đổi mật khẩu thành công." });
     }
 }

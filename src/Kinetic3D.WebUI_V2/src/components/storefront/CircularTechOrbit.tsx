@@ -16,6 +16,7 @@ import {
   Plus,
   Minus
 } from "lucide-react";
+import { useAppStore } from "@/store/useAppStore";
 
 export interface OrbitProduct {
   id: string;
@@ -59,7 +60,7 @@ export const ORBIT_PRODUCTS: OrbitProduct[] = [
     description: "Chiến binh Mecha tương lai với panel line siêu sắc nét, bề mặt láng mịn không tì vết. In quang hóa Resin SLA độ phân giải siêu cao, tối ưu cho anh em đam mê sơn phết thủ công.",
     specs: ["Tỉ Lệ 1:12", "SLA 8K Resin", "Panel Line Sắc Nét", "Khớp Cử Động"],
     image: "/images/products/cyber-bot-print.jpg",
-    slug: "/custom",
+    slug: "/products",
   },
   {
     id: "artisan-keycap",
@@ -120,6 +121,7 @@ export const ORBIT_PRODUCTS: OrbitProduct[] = [
 ];
 
 export function CircularTechOrbit() {
+  const { openComingSoonModal } = useAppStore();
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(1);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -212,7 +214,7 @@ export function CircularTechOrbit() {
                   {activeProduct.price}
                 </div>
                 <div className="text-xs font-mono uppercase tracking-widest" style={{ color: "var(--c-white-50)" }}>
-                  // {activeProduct.polyCount}
+                  {`// ${activeProduct.polyCount}`}
                 </div>
               </div>
 
@@ -282,8 +284,9 @@ export function CircularTechOrbit() {
                 </Link>
 
                 {/* Secondary Studio Button */}
-                <Link
-                  href="/custom"
+                <button
+                  type="button"
+                  onClick={() => openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator")}
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-3.5 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer hover:border-[#f5b942]/50 hover:bg-[#f5b942]/10"
                   style={{
                     backgroundColor: "var(--c-bg-card)",
@@ -294,7 +297,7 @@ export function CircularTechOrbit() {
                 >
                   <Box className="w-4 h-4 text-[#f5b942]" />
                   <span className="hidden sm:inline">3D Studio</span>
-                </Link>
+                </button>
               </div>
 
               {/* Navigation & Progress Row */}
@@ -639,7 +642,7 @@ export function CircularTechOrbit() {
         className="relative z-20 text-center mt-6 text-[11px] font-mono tracking-widest uppercase transition-colors"
         style={{ color: "var(--c-white-50)" }}
       >
-        // CLICK THUMBNAIL HOẶC DÙNG NÚT ĐIỀU HƯỚNG ĐỂ XOAY QUỸ ĐẠO MÔ HÌNH 3D //
+        {"// CLICK THUMBNAIL HOẶC DÙNG NÚT ĐIỀU HƯỚNG ĐỂ XOAY QUỸ ĐẠO MÔ HÌNH 3D //"}
       </div>
     </div>
   );

@@ -106,14 +106,28 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/custom"
-                className="flex items-center gap-2 text-sm font-bold transition-all hover:scale-105"
+              <button
+                type="button"
+                onClick={() => openComingSoonModal("Bảng Giá & Gói Dịch Vụ Token Studio")}
+                className="text-sm font-medium transition-colors cursor-pointer"
+                style={{ color: textMutedColor }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = textColor)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = textMutedColor)}
+              >
+                Bảng giá
+              </button>
+              <button
+                type="button"
+                onClick={() => openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator")}
+                className="flex items-center gap-1.5 text-sm font-bold transition-all hover:scale-105 cursor-pointer"
                 style={{ color: "var(--c-lime)" }}
               >
                 <Sparkles className="w-4 h-4" />
-                Custom
-              </Link>
+                <span>Custom</span>
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[var(--c-lime)]/15 border border-[var(--c-lime)]/30 uppercase">
+                  Beta
+                </span>
+              </button>
             </nav>
           </div>
 
@@ -190,14 +204,8 @@ export default function Header() {
 
             {/* Upgrade CTA */}
             <button
-              onClick={() => {
-                if (!isAuthenticated) {
-                  openAuthModal();
-                } else {
-                  openCreditModal();
-                }
-              }}
-              className="hidden sm:flex items-center gap-1.5 text-xs font-bold tracking-wider px-4 py-2 rounded-full transition-all hover:scale-105"
+              onClick={() => openComingSoonModal("Gói Dịch Vụ Studio Pro & Enterprise")}
+              className="hidden sm:flex items-center gap-1.5 text-xs font-bold tracking-wider px-4 py-2 rounded-full transition-all hover:scale-105 cursor-pointer"
               style={{
                 backgroundColor: "var(--c-orange)",
                 color: "#ffffff",
@@ -242,24 +250,37 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/custom"
-            onClick={() => setMobileOpen(false)}
-            className="text-2xl font-bold tracking-[-0.03em] transition-colors flex items-center gap-2"
-            style={{ color: "var(--c-lime)" }}
-          >
-            <Sparkles className="w-6 h-6" />
-            Custom
-          </Link>
           <button
             type="button"
             onClick={() => {
               setMobileOpen(false);
-              if (!isAuthenticated) {
-                openAuthModal();
-              } else {
-                openCreditModal();
-              }
+              openComingSoonModal("Bảng Giá & Gói Dịch Vụ Token Studio");
+            }}
+            className="text-3xl font-bold tracking-[-0.03em] transition-colors"
+            style={{ color: "var(--c-white)" }}
+          >
+            Bảng giá
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(false);
+              openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator");
+            }}
+            className="text-2xl font-bold tracking-[-0.03em] transition-colors flex items-center gap-2"
+            style={{ color: "var(--c-lime)" }}
+          >
+            <Sparkles className="w-6 h-6" />
+            <span>Custom</span>
+            <span className="text-xs px-2 py-0.5 rounded bg-[var(--c-lime)]/20 uppercase font-mono">
+              Beta
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(false);
+              openComingSoonModal("Gói Dịch Vụ Studio Pro & Enterprise");
             }}
             className="text-2xl font-bold tracking-[-0.03em] transition-colors flex items-center gap-2"
             style={{ color: "var(--c-orange)" }}

@@ -92,6 +92,7 @@ services:
       - GoogleSettings__ClientId=769330965816-b43m8bgmaji0pegp7r58uqbd0up1mls5.apps.googleusercontent.com
       - GoogleSettings__ClientSecret=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
       - TripoSettings__ApiKey=tsk_lEA-ZKk5yNHUcnpj7kvTGvfUM-GNxHF-OKXm5PqFIYA
+      - "CassoSettings__WebhookSecret=ZZg;NLZ3daPf2&iN"
     ports:
       - "5099:8080"
     networks:

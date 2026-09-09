@@ -130,6 +130,20 @@ export const authApi = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+  getMe: () =>
+    apiFetch<{ id: string; email: string; displayName: string; role: string; credits: number; avatarUrl?: string; createdAt: string }>(
+      "/api/auth/me",
+      {},
+      true
+    ),
+  updateProfile: (data: { displayName?: string; avatarUrl?: string }) =>
+    apiFetch<{ id: string; email: string; displayName: string; role: string; credits: number; avatarUrl?: string }>(
+      "/api/auth/profile",
+      { method: "PUT", body: JSON.stringify(data) },
+      true
+    ),
+  changePassword: (data: { currentPassword?: string; newPassword: string }) =>
+    apiFetch<{ message: string }>("/api/auth/change-password", { method: "PUT", body: JSON.stringify(data) }, true),
 };
 
 export const creditsApi = {

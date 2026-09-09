@@ -16,10 +16,10 @@ function fmtVND(n: number) {
 }
 
 const CASSO_BANK_INFO = {
-  bankId: "MB",
-  bankName: "MBBank (Ngân Hàng Quân Đội)",
-  accountNumber: "0988888888",
-  accountName: "CONG TY KINETIC3D",
+  bankId: "TIMO",
+  bankName: "Ngân hàng số Timo by Ban Viet Bank",
+  accountNumber: "9021597313131",
+  accountName: "DO PHU KHUONG",
 };
 
 export default function CheckoutPage() {
@@ -59,7 +59,6 @@ export default function CheckoutPage() {
   // Casso Polling State
   const [isPaid, setIsPaid] = useState(false);
   const [isPolling, setIsPolling] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(false);
   const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -136,23 +135,6 @@ export default function CheckoutPage() {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
     };
   }, [orderPlaced, paymentMethod, isPaid, orderNumber]);
-
-  // Dev simulate Casso webhook
-  const handleSimulatePayment = async () => {
-    if (!orderNumber) return;
-    setIsSimulating(true);
-    try {
-      const res = await paymentsApi.simulateCassoPayment(orderNumber);
-      if (res.success) {
-        setIsPaid(true);
-        setIsPolling(false);
-      }
-    } catch (err) {
-      alert("Lỗi giả lập thanh toán: " + (err as Error).message);
-    } finally {
-      setIsSimulating(false);
-    }
-  };
 
   if (items.length === 0 && !orderPlaced) {
     return (

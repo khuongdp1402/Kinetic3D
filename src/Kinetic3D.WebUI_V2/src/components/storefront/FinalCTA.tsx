@@ -2,8 +2,24 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useAppStore } from "@/store/useAppStore";
+import { useState } from "react";
 
 export function FinalCTA() {
+  const { openComingSoonModal } = useAppStore();
+  const [nlEmail, setNlEmail] = useState("");
+  const [nlSuccess, setNlSuccess] = useState(false);
+
+  const handleNewsletter = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!nlEmail) return;
+    try {
+      const list = JSON.parse(localStorage.getItem("kinetic3d_newsletter") || "[]");
+      list.push({ email: nlEmail, date: new Date().toISOString() });
+      localStorage.setItem("kinetic3d_newsletter", JSON.stringify(list));
+    } catch {}
+    setNlSuccess(true);
+  };
   return (
     <section
       className="w-full py-28 md:py-36 relative overflow-hidden transition-colors duration-300 border-t"
@@ -76,16 +92,17 @@ export function FinalCTA() {
               Khám Phá Catalog →
             </Link>
 
-            <Link
-              href="/custom"
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] border hover:border-[#f5b942] hover:text-[#f5b942]"
+            <button
+              type="button"
+              onClick={() => openComingSoonModal("Xưởng In 3D Độc Bản & AI Mesh Generator")}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] border hover:border-[#f5b942] hover:text-[#f5b942] cursor-pointer"
               style={{
                 borderColor: "var(--c-white-15)",
                 color: "var(--c-white)",
               }}
             >
               Tạo Custom 3D
-            </Link>
+            </button>
           </div>
 
           {/* Newsletter */}
@@ -102,34 +119,37 @@ export function FinalCTA() {
             >
               Nhận thông báo về tính năng & bộ sưu tập mới
             </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Đăng ký thành công! (Demo)");
-              }}
-              className="flex"
-            >
-              <input
-                type="email"
-                placeholder="ban@email.com"
-                className="flex-1 px-4 py-3 text-sm outline-none rounded-l-xl border border-r-0 font-mono placeholder:text-neutral-400 focus:border-[#f5b942]/60 transition-colors"
-                style={{
-                  backgroundColor: "var(--c-bg-deep)",
-                  borderColor: "var(--c-white-15)",
-                  color: "var(--c-white)",
-                }}
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 text-xs font-bold uppercase tracking-widest rounded-r-xl transition-opacity hover:opacity-90 font-mono cursor-pointer"
-                style={{
-                  backgroundColor: "#f5b942",
-                  color: "#0a0a0f",
-                }}
-              >
-                →
-              </button>
-            </form>
+            {!nlSuccess ? (
+              <form onSubmit={handleNewsletter} className="flex">
+                <input
+                  type="email"
+                  required
+                  value={nlEmail}
+                  onChange={(e) => setNlEmail(e.target.value)}
+                  placeholder="ban@email.com"
+                  className="flex-1 px-4 py-3 text-sm outline-none rounded-l-xl border border-r-0 font-mono placeholder:text-neutral-400 focus:border-[#f5b942]/60 transition-colors"
+                  style={{
+                    backgroundColor: "var(--c-bg-deep)",
+                    borderColor: "var(--c-white-15)",
+                    color: "var(--c-white)",
+                  }}
+                />
+                <button
+                  type="submit"
+                  className="px-6 py-3 text-xs font-bold uppercase tracking-widest rounded-r-xl transition-opacity hover:opacity-90 font-mono cursor-pointer"
+                  style={{
+                    backgroundColor: "#f5b942",
+                    color: "#0a0a0f",
+                  }}
+                >
+                  →
+                </button>
+              </form>
+            ) : (
+              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+                ✓ Cảm ơn bạn! Đã đăng ký nhận bản tin thành công.
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

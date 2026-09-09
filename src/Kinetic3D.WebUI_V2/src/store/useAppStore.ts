@@ -12,6 +12,9 @@ interface AppState {
   language: Language;
   currency: Currency;
   
+  isComingSoonModalOpen: boolean;
+  comingSoonFeatureName: string;
+
   openAuthModal: () => void;
   closeAuthModal: () => void;
   
@@ -20,6 +23,9 @@ interface AppState {
   
   openSubscriptionModal: (packageId?: string) => void;
   closeSubscriptionModal: () => void;
+
+  openComingSoonModal: (featureName?: string) => void;
+  closeComingSoonModal: () => void;
   
   setLanguage: (lang: Language) => void;
   setCurrency: (currency: Currency) => void;
@@ -32,6 +38,8 @@ export const useAppStore = create<AppState>()(
       isCreditModalOpen: false,
       isSubscriptionModalOpen: false,
       selectedPackageId: null,
+      isComingSoonModalOpen: false,
+      comingSoonFeatureName: "Tính năng Studio",
       language: "vi", // Default to Vietnamese
       currency: "VND", // Default to VND
       
@@ -63,6 +71,11 @@ export const useAppStore = create<AppState>()(
           isSubscriptionModalOpen: false,
           selectedPackageId: null,
         }),
+
+      openComingSoonModal: (featureName = "Tính năng Studio") =>
+        set({ isComingSoonModalOpen: true, comingSoonFeatureName: featureName }),
+      closeComingSoonModal: () =>
+        set({ isComingSoonModalOpen: false }),
       
       setLanguage: (lang) => set({ language: lang }),
       setCurrency: (currency) => set({ currency }),

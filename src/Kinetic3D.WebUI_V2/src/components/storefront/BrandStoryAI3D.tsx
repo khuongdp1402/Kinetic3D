@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   ImagePlus, 
@@ -10,20 +9,19 @@ import {
   Sparkles, 
   Layers, 
   Cpu, 
-  Box, 
   ShieldCheck 
 } from "lucide-react";
+import { useAppStore } from "@/store/useAppStore";
 
 export function BrandStoryAI3D() {
-  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [prompt, setPrompt] = useState("");
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const { openComingSoonModal } = useAppStore();
 
   const goToStudio = () => {
-    const params = prompt.trim() ? `?prompt=${encodeURIComponent(prompt.trim())}` : "";
-    router.push(`/custom${params}`);
+    openComingSoonModal("Công Cụ Tạo Mẫu AI Mesh Từ Văn Bản & Ý Tưởng");
   };
 
   const onPickFile = () => fileInputRef.current?.click();
@@ -32,7 +30,7 @@ export function BrandStoryAI3D() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFileName(file.name);
-      router.push("/custom?source=upload");
+      openComingSoonModal(`Tạo Mẫu 3D Từ Ảnh [${file.name}]`);
     }
   };
 
@@ -42,7 +40,7 @@ export function BrandStoryAI3D() {
     const file = e.dataTransfer.files?.[0];
     if (file) {
       setSelectedFileName(file.name);
-      router.push("/custom?source=upload");
+      openComingSoonModal(`Tạo Mẫu 3D Từ Ảnh [${file.name}]`);
     }
   };
 
@@ -102,7 +100,7 @@ export function BrandStoryAI3D() {
                 className="mt-3 text-lg md:text-xl font-mono font-medium"
                 style={{ color: "var(--c-orange)" }}
               >
-                // Quad-Mesh Tự Động • Xuất Xưởng In Đa Màu AMS
+                {"// Quad-Mesh Tự Động • Xuất Xưởng In Đa Màu AMS"}
               </p>
             </motion.div>
 

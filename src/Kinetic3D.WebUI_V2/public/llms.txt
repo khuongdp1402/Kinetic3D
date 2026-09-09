@@ -23,7 +23,7 @@
 - **Studio Enterprise (890.000₫/month):** Unlimited AI generation, dedicated 1-on-1 CAD engineer support, aerospace materials (Carbon Fiber, PEEK, dental resin), electronic VAT invoicing.
 
 ## Payment & Fulfillment Protocols
-- **Automated VietQR:** Instant 24/7 bank transfer matching via Casso (MBBank STK 0988888888, recipient: CONG TY KINETIC3D). Orders automatically trigger workshop 3D print queues and Telegram alerts upon payment receipt.
+- **Automated VietQR:** Instant 24/7 bank transfer matching via Casso (Timo STK 9021597313131, recipient: DO PHU KHUONG). Orders automatically trigger workshop 3D print queues and Telegram alerts upon payment receipt.
 - **Cash on Delivery (COD):** Nationwide delivery with full unboxing inspection rights (đồng kiểm).
 - **Turnaround Times:** Printing in 12-36 hours. Delivery within 24 hours for Hanoi & Ho Chi Minh City; 48-72 hours nationwide via express courier.
 - **Warranty & Quality Guarantee:** 100% free reprint or full refund within 7 days if dimensional deviation exceeds ±0.25mm or in case of transit breakage.
